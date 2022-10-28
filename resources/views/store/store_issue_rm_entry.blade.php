@@ -16,6 +16,7 @@
   <strong>Error!</strong> {{session('error')}}.
   <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
 </div>
+
 @endif
   
     <div class="card">
