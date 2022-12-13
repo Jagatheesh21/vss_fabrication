@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('uom_id');
             $table->foreignId('route_card_type_id')->nullable();
             $table->string('route_card_number')->nullable();
+            $table->decimal('issue_quantity')->default('0.00');
             $table->integer('status')->default(1);
             $table->integer('route_card_status')->default(1);
             $table->timestamp('closed_date')->nullable();

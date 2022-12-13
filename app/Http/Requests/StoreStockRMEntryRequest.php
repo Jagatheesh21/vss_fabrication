@@ -28,6 +28,9 @@ class StoreStockRMEntryRequest extends FormRequest
             'raw_material_id' => 'required',
             'uom_id' => 'required',
             'inward_quantity' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'invoice_number' => 'required',
+            'purchase_order_id' => 'required',
+            'supplier_id' => 'required',
         ];
     }
 }

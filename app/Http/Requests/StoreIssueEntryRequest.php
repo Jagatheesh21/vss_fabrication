@@ -24,6 +24,8 @@ class StoreIssueEntryRequest extends FormRequest
     public function rules()
     {
         return [
+            'route_card_type_id' => 'required',
+            'route_card_number' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
             'raw_material_id' => 'required',

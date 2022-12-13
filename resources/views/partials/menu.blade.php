@@ -16,13 +16,22 @@
         <li class="nav-item"><a class="nav-link" href="{{route('type.index')}}"><span class="nav-icon"></span> Type</a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('raw_material.index')}}"><span class="nav-icon"></span> Raw Material </a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('child_part_number.index')}}"><span class="nav-icon"></span> Child Part Number</a></li>  
-        <li class="nav-item"><a class="nav-link" href="{{route('part_master.index')}}"><span class="nav-icon"></span>  Part Master</a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{route('part_master.index')}}"><span class="nav-icon"></span>  Child Part Master</a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('nesting.index')}}"><span class="nav-icon"></span>  Nesting </a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('nesting_sequence.index')}}"><span class="nav-icon"></span>  Nesting Sequence </a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('child_part_bom.index')}}"><span class="nav-icon"></span>  Child Part BOM </a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('process_master.index')}}"><span class="nav-icon"></span>  Process Master </a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{route('supplier.index')}}"><span class="nav-icon"></span> Supplier </a></li>  
       </ul>
     </li>
+    {{-- <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+      <svg class="nav-icon">
+        <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-library-building')}}"></use>
+      </svg> Purchase </a>
+      <ul class="nav-group-items">
+        <li class="nav-item"><a class="nav-link" href="{{route("purchase_order.index")}}"><span class="nav-icon"></span> Purchase Orders </a></li>      
+      </ul>
+    </li> --}}
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-library-building')}}"></use>
@@ -34,6 +43,16 @@
         <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Issue Child Part </a></li>      
       </ul>
     </li>
+    <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+      <svg class="nav-icon">
+        <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass
+        ')}}"></use>
+      </svg> Quality </a>
+      <ul class="nav-group-items">
+        <li class="nav-item"><a class="nav-link" href="{{route('good_received_note.index')}}"><span class="nav-icon"></span> GRN Generation </a></li>      
+      </ul>
+    </li>
+
     {{-- REPORTS --}}
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
@@ -49,7 +68,7 @@
     </li>
     <li class="nav-item mt-auto"><a class="nav-link nav-link-danger" href="#" target="_top">
       <svg class="nav-icon">
-        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-layers"></use>
+        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-files"></use>
       </svg> DB Backup
     </a></li>
     <li class="nav-item "><a class="nav-link" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">

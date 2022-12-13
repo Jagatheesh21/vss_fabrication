@@ -1,9 +1,9 @@
     @foreach($nesting_types as $nesting_type)
-    <div class="row mb-3 item_row">
+    <div class="row mb-3 item_row" data-id="{{$loop->iteration}}">
         <table>
             <div class="col-sm-4">
                 <label for="">Nesting Type</label>
-                <select name="nesting_type_id[]" class="form-control select2 nesting_type_id" >
+                <select name="nesting_type_id[]" class="form-control select2 nesting_type_id" id="nesting_type_id_{{$loop->iteration}}"  data-id="{{$loop->iteration}}">
                     <option value="">Select Type</option>
                     @foreach($types as $type)
                     @if($type->id==$nesting_type->type_id)
@@ -12,20 +12,16 @@
                     @endforeach
                 </select>
                 @error('nesting_type_id')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
+                <span class="text-danger">{{$message}}</span>
+                @enderror
             </div>
             <div class="col-sm-4 child_part_number" >
                 <label for="">Child Part Number</label>
-                <select name="child_part_number_id[]"  class="form-control select2 child_part_number_id">
+                <select name="child_part_number_id[]" id="child_part_number_id_{{$loop->iteration}}" class="form-control select2 child_part_number_id" data-id="{{$loop->iteration}}"> required>
                     <option value="">Select Child Part</option>
-                    @foreach($child_part_numbers as $child_part_number)
-                    <option value="{{$child_part_number->id}}">{{$child_part_number->name}}</option>
-                    @endforeach
+                   
                 </select>
-                @error('child_part_number_id')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
+                
             </div>
             <div class="col-sm-4 quantity">
                 <label for="">Quantity</label>
@@ -48,21 +44,29 @@
         allowClear: true
     });
  
-//     $(".nesting_type_id").change(function(e){
-//     e.preventDefault();
-//     var nesting_type_id = $(this).val();
-//     if(nesting_type_id!='')
-//     {
-//     $.ajax({
-//         url:'{{route("getChildPartnumber")}}',
-//         type:'POST',
-//         data:{nesting_type_id:nesting_type_id},
-//         success:function(response){
-//             console.log(response.html);
-//             $(this).closest(".item_row").find(".child_part_number").html(response.html);
-//             //$(this).closest('#nesting_view').find(".child_part_number").html(response.html);
-//         }
-//     });
-//     }
-// });
+    $('body').on('change','.nesting_type_id',function(e){
+    e.preventDefault();
+    var nesting_type_id = $(this).val();
+    var row_id = $(this).closest(".item_row").data("id");
+    
+    if(nesting_type_id!='')
+    {
+    //alert(nesting_type_id);
+    $.ajax({
+        url:'{{route("getChildPartnumber")}}',
+        type:'POST',
+        data:{nesting_type_id:nesting_type_id},
+        success:function(response){
+            $("#child_part_number_id_"+row_id).html(response.html);
+            $("#child_part_number_id_"+row_id).select2({
+    placeholder: "Select a Child Part number",
+    allowClear: true
+   
+});
+            // $(this).closest(".item_row").next().find(".child_part_number_id").html(response.html);
+            // $(this).closest('#nesting_view').find(".child_part_number").html(response.html);
+        }
+    });
+    }
+});
 </script>

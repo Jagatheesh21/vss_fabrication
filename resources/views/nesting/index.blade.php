@@ -7,12 +7,12 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        Nesting <a href="{{route('nesting.create')}}" class="btn btn-primary btn-sm float-end" >Create New</a>
+        Nesting <a href="{{route('nesting.create')}}" class="btn btn-info btn-sm float-end" >Create New</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover" id="nesting_table">
-                <thead class="bg-info">
+                <thead class="bg-secondary">
                     <tr>
                         <th>SNo</th>
                         <th>Name</th>

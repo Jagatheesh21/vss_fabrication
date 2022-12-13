@@ -60,9 +60,13 @@
       
   </body>
 </html>
+<script src="{{asset('vendors/chart.js/js/chart.min.js')}}"></script>
+<script src="{{asset('vendors/@coreui/chartjs/js/coreui-chartjs.js')}}"></script>
+<script src="{{asset('vendors/@coreui/utils/js/coreui-utils.js')}}"></script>
 <script src="{{asset('vendors/@coreui/coreui/js/coreui.bundle.min.js')}}"></script>
 <script src="{{asset('vendors/simplebar/js/simplebar.min.js')}}"></script>
 <script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="{{asset('js/jquery_validation.min.js')}}"></script>
 <script src="{{asset('js/sweetalert.min.js')}}"></script>
 <script src="{{asset('js/toasts.js')}}"></script>
 <script type="text/javascript">

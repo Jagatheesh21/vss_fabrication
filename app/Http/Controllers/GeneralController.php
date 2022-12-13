@@ -13,24 +13,34 @@ use App\Models\Operation;
 use App\Models\Nesting;
 use App\Models\NestingSequence;
 use App\Models\StoreTranscation;
+use App\Models\StoreStock;
+use App\Models\Supplier;
+use App\Models\PurchaseOrder;
 
 use Illuminate\Http\Request;
 
 class GeneralController extends Controller
 {
-    public function __construct()
-    {
+    // public function __construct()
+    // {
 
-    }
+    // }
 
-    public function getTypes()
+    public function getTypes(Request $request)
     {
-        $types = Type::whereStatus(1)->get();
-        
+        $types = Type::where('status',1);
+        if($request->category_id)
+        {
+            $category_id = $request->category_id;
+            $types = $types->where('category_id',$category_id);
+        }
+        $types = $types->get();
+        $html = view('general.types',compact('types'))->render();
+        return response(['html' => $html]);
     }
     public function getMaterials(Request $request)
     {
-        $materials = RawMaterial::whereStatus(1);
+        $materials = RawMaterial::where('status',1);
         if($request->type_id)
         {
             $type_id = $request->type_id;
@@ -40,5 +50,72 @@ class GeneralController extends Controller
         $html = view('general.raw_materials',compact('materials'))->render();
         return response(['html' => $html]);
     }
+    public function getSuppliers(Request $request)
+    {
+        if($request->purchase_order_id)
+        {
+            $suppliers = Supplier::where('status',1)->get();
+            $purchase_order_id = $request->purchase_order_id;
+            $purchase_order = PurchaseOrder::find($purchase_order_id);
+            $supplier = Supplier::find($purchase_order->supplier_id);
+            $html = view('general.suppliers',compact('supplier','suppliers'))->render();
+            return response(['html' => $html]);
+        }
+        
+    }  
+    public function getNestings(Request $request)
+    {
+        if($request->raw_material_id)
+        {
+            $raw_material_id = $request->raw_material_id;
+            $nestings = ChildPartBom::with('nesting')->where('raw_material_id',$raw_material_id)->GroupBy('nesting_id')->get();
+            $html = view('general.nestings',compact('nestings'))->render();
+            return response(['html' => $html]);
+        }
+    }  
+    public function getNestingList(Request $request)
+    {
+        if($request->nesting_id)
+        {
+            $nesting_id = $request->nesting_id;
+            $raw_material_id = $request->raw_material_id;
+            $nesting_sequences = ChildPartBom::with(['nesting_type','child_part_number'])->where('nesting_id',$nesting_id)->where('raw_material_id',$raw_material_id)->GroupBy('nesting_type_id')->get();
+            $html = view('general.nesting_list',compact('nesting_sequences'))->render();
+            return response(['html' => $html]);
+        }
+    }
+    public function getNestingSequences(Request $request)
+    {
+        if($request->nesting_id)
+        {
+            $nesting_id = $request->nesting_id;
+            $raw_material_id = $request->raw_material_id;
+            $nesting_sequences = ChildPartBom::with('nesting_type')->where('nesting_id',$nesting_id)->where('raw_material_id',$raw_material_id)->GroupBy('nesting_type_id')->get();
+            $html = view('general.nesting_sequences',compact('nesting_sequences'))->render();
+            return response(['html' => $html]);
+        }
+    }
+    public function getNestingPartNumbers(Request $request)
+    {
+        if($request->nesting_id)
+        {
+            $nesting_id = $request->nesting_id;
+            $raw_material_id = $request->raw_material_id;
+            $nesting_type_id = $request->nesting_type_id;
+            $child_part_numbers = ChildPartBom::with('child_part_number')->where('nesting_id',$nesting_id)->where('raw_material_id',$raw_material_id)->where('nesting_type_id',$nesting_type_id)->get();
+            $html = view('general.nesting_part_numbers',compact('child_part_numbers'))->render();
+            return response(['html' => $html]);
+        }
+    }      
+    public function getAvailableQuantity(Request $request)
+    {
+        if($request->purchase_order_id)
+        {
+            $purchase_order_id = $request->purchase_order_id;
+            $purchase = PurchaseOrder::find($purchase_order_id); 
+            $total_quantity = $purchase->quantity;
+            StoreStock::where('purchase_order_id',$purchase_order_id)->where('issued_quantity')->get();
 
+        }
+    }
 }

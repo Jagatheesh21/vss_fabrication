@@ -7,6 +7,10 @@ use App\Http\Requests\StoreChildPartNumberRequest;
 use App\Http\Requests\UpdateChildPartNumberRequest;
 use DataTables;
 use Illuminate\Http\Request;
+use App\Exports\ChildPartNumberExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 class ChildPartNumberController extends Controller
 {
     /**
@@ -18,15 +22,10 @@ class ChildPartNumberController extends Controller
     {
         if($request->ajax()){
             $data = ChildPartNumber::latest()->get();
-      
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
-       
                                $btn = '<a href="'.route('child_part_number.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
-       
-                               //$btn = $btn.' <a href="'.route('operation.destroy',$row->id).'"  data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
-        
                                 return $btn;
                         })
                         ->rawColumns(['action'])
@@ -81,7 +80,7 @@ class ChildPartNumberController extends Controller
      */
     public function edit(ChildPartNumber $childPartNumber)
     {
-        //
+        return view('child_part_number.edit',compact('childPartNumber'));
     }
 
     /**
@@ -93,7 +92,13 @@ class ChildPartNumberController extends Controller
      */
     public function update(UpdateChildPartNumberRequest $request, ChildPartNumber $childPartNumber)
     {
-        //
+        try {
+            $childPartNumber->update($request->validated());
+            return redirect()->back()->withSuccess("Child Part Number Details Updated Successfully!");
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->withError($th->getMessage());
+        }
     }
 
     /**
@@ -105,5 +110,9 @@ class ChildPartNumberController extends Controller
     public function destroy(ChildPartNumber $childPartNumber)
     {
         //
+    }
+    public function export() 
+    {
+        return Excel::download(new ChildPartNumberExport, 'child_part_numbers.xlsx');
     }
 }

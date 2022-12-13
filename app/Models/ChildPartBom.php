@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ChildPartBom extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['bom_id','type_id','raw_material_id','nesting_id','nesting_type_id','child_part_number_id','quantity'];
+    protected $fillable = ['bom_id','category_id','type_id','raw_material_id','nesting_id','nesting_type_id','child_part_number_id','quantity'];
 
     public static function getNextBomNumber()
 {

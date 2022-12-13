@@ -6,7 +6,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-                 <strong>Child part BOM - List</strong><a href="{{route('child_part_bom.create')}}" class="btn btn-primary btn-sm float-end">Add New</a>
+                 <strong>Child Part BOM - List</strong><a href="{{route('child_part_bom.create')}}" class="btn btn-primary btn-sm float-end">Add New</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -15,9 +15,10 @@
                     <tr>
                         <th>SNo</th>
                         <th>BOM</th>
+                        <th>Type</th>
                         <th>Raw Material</th>
                         <th>Nesting</th>
-                        <th>Type</th>
+                        <th>Nesting Type</th>
                         <th>ChildPartNumber</th>
                         <th>Quantity</th>
                         <th>Action</th>
@@ -45,9 +46,10 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'bom_id', name: 'bom'},
-            {data: 'raw_material.name', name: 'raw_material'},
-            {data: 'nesting.name', name: 'nesting'},
             {data: 'type.name', name: 'type'},
+            {data: 'raw_material.part_description', name: 'raw_material'},
+            {data: 'nesting.name', name: 'nesting'},
+            {data: 'nesting_type.name', name: 'nesting_type'},
             {data: 'child_part_number.name', name: 'child_part_number'},
             {data: 'quantity', name: 'quantity'},
             {data: 'action', name: 'action', orderable: false, searchable: false},

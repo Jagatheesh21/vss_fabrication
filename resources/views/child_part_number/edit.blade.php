@@ -19,17 +19,17 @@
   @endif
     <div class="card mb-4">
         <div class="card-header">
-            <strong>Edit Stocking Point</strong>
+            <strong>Edit Child Part Number</strong>
         </div>
         <div class="card-body">
             <div class="row">
-                <form id="stocking_point_update" method="POST" action="{{route('stocking_points.update',$stocking_point->id)}}">
+                <form id="stocking_point_update" method="POST" action="{{route('child_part_number.update',$childPartNumber->id)}}">
                   @csrf
                   @method('PUT')
                     <div class="row mb-3">
                       <label for="name" class="col-sm-2 col-form-label required">Name</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name" name="name" autocomplete="off" value="{{$stocking_point->name}}">
+                        <input type="text" class="form-control" id="name" name="name" autocomplete="off" value="{{$childPartNumber->name}}">
                         @error('name')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -38,7 +38,7 @@
                     <div class="row mb-3">
                       <label for="descrption" class="col-sm-2 col-form-label">Description</label>
                       <div class="col-sm-10">
-                        <textarea name="description" id="description" class="form-control" rows="10">{!!$stocking_point->description!!}</textarea>
+                        <textarea name="description" id="description" class="form-control" rows="10">{!!$childPartNumber->description!!}</textarea>
                         @error('description')
                         <span class="text-danger">{{$message}}</span>
                         @enderror

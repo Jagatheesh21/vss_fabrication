@@ -22,6 +22,8 @@ return new class extends Migration
             $table->decimal('inward_quantity',16,2);
             $table->decimal('checked_quantity',16,2)->default(0.00);
             $table->decimal('rejection_quantity',16,2)->default(0.00);
+            $table->decimal('issued_quantity',16,2)->default(0.00);
+            $table->decimal('available_quantity',16,2)->default(0.00);
             $table->integer('status')->default(1);
             $table->foreignId('created_by');
             $table->foreignId('updated_by');

@@ -17,6 +17,9 @@ use App\Http\Controllers\ProcessMasterController;
 use App\Http\Controllers\StoreReceiveEntryController;
 use App\Http\Controllers\StoreIssueEntryController;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\GoodReceivedNoteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,10 +37,12 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('setting', SettingController::class);
+    Route::get('operation/export/', [OperationController::class, 'export']);
     Route::resource('operation', OperationController::class);
     Route::resource('stocking_points', StockingPointController::class);
     Route::resource('category', CategoryController::class);
     Route::resource('type', TypeController::class);
+    Route::get('child_part_number/export/', [ChildPartNumberController::class, 'export'])->name('child_part_number.export');
     Route::resource('child_part_number', ChildPartNumberController::class);
     Route::resource('part_master', PartMasterController::class);
     Route::resource('nesting', NestingController::class);
@@ -49,7 +54,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('child_part_bom/getChildPartnumber', [ChildPartBomController::class,'getChildPartnumber'])->name('getChildPartnumber');
     Route::post('child_part_bom/getRawMaterials', [ChildPartBomController::class,'getRawMaterials'])->name('getRawMaterials');
     Route::resource('process_master', ProcessMasterController::class);
+    Route::post('store_receive/getSupplier', [StoreReceiveEntryController::class,'getSupplier'])->name('store.getSupplier');
+    Route::post('store_receive/getPurchaseOrder', [StoreReceiveEntryController::class,'getPurchaseOrder'])->name('store.getPurchaseOrder');
     Route::resource('store_receive', StoreReceiveEntryController::class);
     Route::resource('store_issue', StoreIssueEntryController::class);
-    Route::post('/materials', [GeneralController::class,'getMaterials'])->name('getMaterials');
+    Route::resource('supplier', SupplierController::class);
+    Route::resource('purchase_order', PurchaseOrderController::class);
+    Route::resource('good_received_note', GoodReceivedNoteController::class);
+    Route::post('/types', [GeneralController::class,'getTypes'])->name('general.types');
+    Route::post('/materials', [GeneralController::class,'getMaterials'])->name('general.materials');
+    Route::post('/suppliers', [GeneralController::class,'getSuppliers'])->name('general.suppliers');
+    Route::post('/nestings', [GeneralController::class,'getNestings'])->name('general.nestings');
+    Route::post('/nesting_sequences', [GeneralController::class,'getNestingSequences'])->name('general.nesting_sequences');
+    Route::post('/nesting_part_numbers', [GeneralController::class,'getNestingPartNumbers'])->name('general.nesting_part_numbers');
+    Route::post('/avaialable_quantity', [GeneralController::class,'getAvailableQuantity'])->name('general.avaialable_quantity');
 });

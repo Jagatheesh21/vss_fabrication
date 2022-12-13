@@ -1,6 +1,6 @@
 <div class="row mb-3">
     <label for="name" class="col-sm-2 col-form-label required">Raw Materials *</label>
-    <div class="col-sm-8">
+    <div class="col-sm-6">
         <select name="raw_material_id" id="raw_material_id"  class="form-control select2">
             <option value="">Select Raw Material</option>
             @foreach($raw_materials as $raw_material)
@@ -14,7 +14,7 @@
 </div>
 <div class="row mb-3">
     <label for="name" class="col-sm-2 col-form-label required">Nestings *</label>
-    <div class="col-sm-8">
+    <div class="col-sm-6">
         <select name="nesting_id" id="nesting_id"  class="form-control select2">
             <option value="">Select Nesting</option>
             @foreach($nestings as $nesting)

@@ -63,39 +63,55 @@ class ChildPartBomController extends Controller
      */
     public function store(StoreChildPartBomRequest $request)
     {
-        $type_id = $request->type_id;
+        
+        $type_id = $request->input('type_id');
         $type = Type::find($type_id);
         $nesting_type_ids = $request->input('nesting_type_id');
         $child_part_number_ids = $request->input('child_part_number_id');
         $quantities = $request->input('quantity');
-        //dd($quantities);
-        if(!isset($quantities))
-        {
-            return back()->withError('Quantity Value is Required..');
-        }else{
-            foreach($quantities as $quantity)
-            {
-                if($quantity==null || $quantity==0){
-                    return back()->withError('Quantity Value is Required..');
-                }
-            }
-        }
+        // foreach($nesting_type_ids as $key=>$nesting_type_id)
+        // {
+        //     //echo $nesting_type_id;
+        //     echo $quantities[$key];
+        // }
+        // exit;
+        // if(!isset($quantities))
+        // {
+        //     return back()->withError('Quantity Value is Required..');
+        // }else{
+        //     foreach($quantities as $quantity)
+        //     {
+        //         if($quantity==null || $quantity==0){
+        //             return back()->withError('Quantity Value is Required..');
+        //         }
+        //     }
+        // }
 
         try {
             foreach($nesting_type_ids as $key=>$nesting_type_id){
-                $bom = new ChildPartBom;
-                $bom->bom_id = $request->bom_id;
-                $bom->category_id = $type->category_id;
-                $bom->type_id = $request->type_id;
-                $bom->raw_material_id = $request->raw_material_id;
-                $bom->nesting_id = $request->nesting_id;
-                $bom->nesting_type_id = $nesting_type_id;
-                $bom->child_part_number_id = $child_part_number_ids[$key];
-                $bom->quantity= $quantities[$key];
-                $bom->save();
-                return back()->withSuccess('BOM Created Successfully!');
                 
+                ChildPartBom::create([
+                    'bom_id' => $request->bom_id, 
+                    'category_id' => $type->category_id, 
+                    'type_id' => $request->type_id, 
+                    'raw_material_id' => $request->raw_material_id, 
+                    'nesting_id' => $request->nesting_id, 
+                    'nesting_type_id' => $nesting_type_ids[$key], 
+                    'child_part_number_id' => $child_part_number_ids[$key], 
+                    'quantity' => $quantities[$key], 
+                ]);
+                // $bom = new ChildPartBom;
+                // $bom->bom_id = $request->bom_id;
+                // $bom->category_id = $type->category_id;
+                // $bom->type_id = $request->type_id;
+                // $bom->raw_material_id = $request->raw_material_id;
+                // $bom->nesting_id = $request->nesting_id;
+                // $bom->nesting_type_id = $nesting_type_id;
+                // $bom->child_part_number_id = $child_part_number_ids[$key];
+                // $bom->quantity= $quantities[$key];
+                // $bom->save();
             }
+            return back()->withSuccess('BOM Created Successfully!');
         } catch (\Throwable $th) {
             //throw $th;
             return back()->withError($th->getMessage());

@@ -25,6 +25,7 @@ class StoreChildPartNumberRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:child_part_numbers,name',
+            'description' => 'required',
         ];
     }
 }

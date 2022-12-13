@@ -7,6 +7,8 @@ use App\Http\Requests\StoreOperationRequest;
 use App\Http\Requests\UpdateOperationRequest;
 use DataTables;
 use Illuminate\Http\Request;
+use App\Exports\OperationExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OperationController extends Controller
 {
@@ -121,5 +123,9 @@ class OperationController extends Controller
             return back()->withError('message','Something Went Wrong.Please Try Again.');
         }
         
+    }
+    public function export() 
+    {
+        return Excel::download(new OperationExport, 'operations.xlsx');
     }
 }

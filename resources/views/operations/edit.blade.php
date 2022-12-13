@@ -8,7 +8,7 @@
     <div class="card mb-4">
         <div class="card-header">
             <h3>Edit Operation</h3>
-        </div>
+        </div>  
         <div class="card-body">
             <div class="row">
                 <form id="operation_update" method="POST" action="{{route('operation.update',$operation->id)}}">

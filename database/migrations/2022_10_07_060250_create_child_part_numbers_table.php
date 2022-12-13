@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('child_part_numbers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('description')->nullable();
             $table->integer('status')->default(1);
             $table->softDeletes();
             $table->timestamps();

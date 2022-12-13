@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="row mb-3">
-        <label for="name" class="col-sm-2 col-form-label required">Raw Material*</label>
+        <label for="name" class="col-sm-2 col-form-label required">Part Description*</label>
         <div class="col-sm-8">
             <select wire:model='raw_material' name="raw_material_id" id="raw_material_id" class="form-control select2">
                 @if($raw_materials->count()==0)
@@ -43,22 +43,24 @@
         </div>
     </div>
 
-    @if($type->id==1)
+    
     <div class="row mb-3">
         <label for="name" class="col-sm-2 col-form-label required">Nesting*</label>
         <div class="col-sm-8">
-            <select wire:model='nesting' name="nesting_id" id="nesting_id">
-                @if($nestings->count()>0)
+            <select wire:model='nesting' name="nesting_id" id="nesting_id" class="form-control">
+                @if($nestings->count()==0)
+                <option value="">Select Type First</option>
+                @else
                 <option value="">Select Nesting</option>
                     @foreach ($nestings as $nesting)
-                    <option value="{{$nesting->id}}">{{$nesting->name}}</option>
+                    <option value="{{$nesting->id}}">{{$nesting->nesting->name}}</option>
                     @endforeach
                 @endif
             </select>
         </div>
         
     </div> 
-    @endif
+    
     
     <div class="row mb-3">
         <label for="name" class="col-sm-2 col-form-label required">Available Quantity*</label>

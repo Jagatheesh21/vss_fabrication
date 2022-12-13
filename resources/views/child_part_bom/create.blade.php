@@ -26,14 +26,15 @@
             <strong>Child Part - BOM</strong> 
         </div>
         <div class="card-body">
-            <div class="col-md-6">
-                <form id="bom_save" method="POST" action="{{route('child_part_bom.store')}}">
+            
+            <div class="col-md-12">
+                <form id="bom_save" action="{{route("child_part_bom.store")}}" method="POST">
                   @csrf
                   @method('POST')
                   {{-- @livewire('raw-material') --}}
                   <div class="row mb-3">
                     <label for="name" class="col-sm-2 col-form-label required">BOM *</label>
-                    <div class="col-sm-10"> 
+                    <div class="col-sm-6"> 
                         <input type="text" class="form-control" name="bom_id" value="{{$bom_number}}" readonly>   
                         @error('bom_id')
                         <span class="text-danger">{{$message}}</span>
@@ -42,7 +43,7 @@
                 </div>
                 <div class="row mb-3">
                     <label for="name" class="col-sm-2 col-form-label required">Type *</label>
-                    <div class="col-sm-10">          
+                    <div class="col-sm-6">          
                             <select id="type_id" name="type_id" class="form-control">
                                 <option value="">Select Type</option>
                                 @foreach ($types as $type)
@@ -76,6 +77,64 @@
 
 <script>
 
+// $('#bom_save').validate({ // initialize the plugin
+//         rules: {
+//             'type_id':'required',
+//             'raw_material_id':'required',
+//             'nesting_id':{
+//                 required:function(element) {
+//                     if($("#type_id").val()==1)
+//                     {
+//                         return true;
+//                     }else{
+//                         return false;
+//                     }
+//                 },
+//             },
+//             'nesting_type_id[]':{
+//                 required:function(element) {
+//                     if($("#type_id").val()==1)
+//                     {
+//                         return true;
+//                     }else{
+//                         return false;
+//                     }
+//                 },
+//             },
+//                 'child_part_number_id[*]':{
+//                 required:function(element) {
+//                     if($("#type_id").val()==1)
+//                     {
+//                         return true;
+//                     }else{
+//                         return false;
+//                     }
+//                 },
+//             }
+//         }
+//     });
+// });
+// $("#bom_save").submit(function(e){
+//     e.preventDefault();
+//     alert("Test");
+//     var $form = $('#bom_save');
+//     if($form.valid()){
+    
+//     var data = $(this).serialize();
+//     $.ajax({
+//         url:"{{route('child_part_bom.store')}}",
+//         type:"POST",
+//         data:data,
+//         success:function(response){
+//             alert(response);
+//         },
+//         error:function(response)
+//         {
+//             alert(response);
+//         }
+//     });
+// }
+// });
 $(".child_part_number_id").select2({
     placeholder: "Select a PartNumber",
     allowClear: true
@@ -95,6 +154,7 @@ if(type_id =='' || type_id==null || type_id==undefined)
 {
    alert('Please Select Type Value..');
 }else{
+if(type_id==1){
 $.ajax({
     url:'{{route("getRawMaterials")}}',
     type:'POST',
@@ -104,6 +164,10 @@ $.ajax({
         $("#raw_material_div").html(response.html);
     }
 });
+}else{
+    $("#raw_material_div").html(" ");
+    $("#nesting_view").html(" ");
+}
 }
 });
 </script>
