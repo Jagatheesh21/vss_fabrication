@@ -16,7 +16,10 @@ class StoreStockObserver
     public function created(StoreStock $storeStock)
     {
        $purchase =  PurchaseOrder::find($request->purchase_order_id);
-       $purchase->$storeStock->inward_quantity;
+       
+       $purchase->available_quantity = $purchase->available_quantity+$storeStock->inward_quantity;
+
+
     }
 
     /**
