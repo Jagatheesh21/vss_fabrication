@@ -27,4 +27,9 @@ class RawMaterial extends Model
         return $this->belongsTo(Type::class, 'type_id');
     }
 
+    public function stock()
+    {
+        return $this->belongsTo(StoreStock::class,'raw_material_id');
+    }
+
 }

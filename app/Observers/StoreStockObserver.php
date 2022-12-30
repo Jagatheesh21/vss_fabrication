@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Observers;
-
+use Illuminate\Http\Request;
 use App\Models\StoreStock;
 use App\Models\PurchaseOrder;
 
@@ -15,11 +15,15 @@ class StoreStockObserver
      */
     public function created(StoreStock $storeStock)
     {
-       $purchase =  PurchaseOrder::find($request->purchase_order_id);
-       
-       $purchase->available_quantity = $purchase->available_quantity+$storeStock->inward_quantity;
-
-
+        $total_inward_quantity = StoreStock::where('purchase_order_id',$storeStock->purchase_order_id)->sum('inward_quantity');
+        $purchase =  PurchaseOrder::find($storeStock->purchase_order_id);
+       if($purchase->useage_quantity==$total_inward_quantity)
+       {
+        $purchase->closed_date = now();
+       }else{
+        $purchase->useage_quantity = $purchase->useage_quantity+$storeStock->inward_quantity;
+       }
+       $purchase->update();
     }
 
     /**

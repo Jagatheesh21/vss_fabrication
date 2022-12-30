@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('store_stocks', function (Blueprint $table) {
             $table->id();
+            $table->string('grn_number');
             $table->foreignId('category_id');
             $table->foreignId('type_id');
             $table->foreignId('raw_material_id');
@@ -27,6 +28,10 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->foreignId('created_by');
             $table->foreignId('updated_by');
+            $table->integer('approved_by')->nullable();
+            $table->date('approved_date')->nullable();
+            $table->integer('approved_status')->default(0);
+            $table->integer('confirm')->default(0);
             $table->text('remarks')->nullable();
             $table->softDeletes();
             $table->timestamps();

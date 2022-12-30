@@ -13,7 +13,7 @@ use App\Http\Requests\StoreChildPartBomRequest;
 use App\Http\Requests\UpdateChildPartBomRequest;
 use DataTables;
 use Illuminate\Http\Request;
-
+use DB;
 class ChildPartBomController extends Controller
 {
     /**

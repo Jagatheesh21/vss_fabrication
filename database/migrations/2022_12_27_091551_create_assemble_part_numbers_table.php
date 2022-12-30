@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('child_part_numbers', function (Blueprint $table) {
+        Schema::create('assemble_part_numbers', function (Blueprint $table) {
             $table->id();
             $table->integer('part_type_id');
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->text('project_name')->nullable();
-            $table->text('revision_number')->nullable();
-            $table->integer('status')->default(1);
-            $table->softDeletes();
+            $table->string('project_name');
+            $table->string('revision_number');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('child_part_numbers');
+        Schema::dropIfExists('assemble_part_numbers');
     }
 };

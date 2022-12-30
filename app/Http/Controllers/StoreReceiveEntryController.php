@@ -14,7 +14,7 @@ use App\Models\Uom;
 use Auth;
 use App\Models\StoreStock;
 use App\Http\Requests\StoreStockRMEntryRequest;
-
+use DB;
 class StoreReceiveEntryController extends Controller
 {
     /**
@@ -34,12 +34,11 @@ class StoreReceiveEntryController extends Controller
      */
     public function create()
     {
-        $categories = Category::whereStatus(1)->get();
+        //dd(StoreStock::where('purchase_order_id',1)->sum('inward_quantity'));
+        $grn_number = StoreStock::getNextGrnNumber(); 
+        //$categories = Category::whereStatus(1)->get();
         $types = Type::where('category_id',1)->whereStatus(1)->get();
-        $raw_materials = RawMaterial::whereStatus(1)->get();
-        $uoms = Uom::whereStatus(1)->get();
-        $purchase_orders = PurchaseOrder::whereStatus(1)->get();
-        return view('store.store_receive_rm_entry',compact('categories','types','raw_materials','uoms','purchase_orders'));
+        return view('store.store_receive_rm_entry',compact('grn_number','types'));
     }
 
     /**
@@ -50,8 +49,10 @@ class StoreReceiveEntryController extends Controller
      */
     public function store(StoreStockRMEntryRequest $request)
     {
+        DB::beginTransaction();
         try {
         $store = new StoreStock;
+        $store->grn_number = $request->grn_number;
         $store->category_id = $request->category_id;
         $store->type_id = $request->type_id;
         $store->raw_material_id = $request->raw_material_id;
@@ -65,10 +66,14 @@ class StoreReceiveEntryController extends Controller
         $store->created_by = auth()->user()->id;            
         $store->updated_by = auth()->user()->id;
         $store->save();
-        // Purchase Order
-        return back()->withSuccess('Store Stock Added Successfully!');            
+        DB::commit();
+        // Purchase Order 
+        return redirect()->route('store_receive.edit', $store->id);
+       //return response()->json(['success' => 'Store Stock Added Successfully!','status' => 200]);
+       // return back()->withSuccess('Store Stock Added Successfully!');            
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollback();
             return back()->withError($th->getMessage());            
         }
     }
@@ -92,7 +97,19 @@ class StoreReceiveEntryController extends Controller
      */
     public function edit($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $store = StoreStock::find($id);
+            $types = Type::where('category_id',1)->whereStatus(1)->get();
+            $raw_materials = RawMaterial::get();
+            $types = Type::where('category_id',1)->whereStatus(1)->get();
+            DB::commit();
+            return view('store.grn_approval',compact('store','types','raw_materials'));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            return back()->withError($th->getMessage());
+        }
     }
 
     /**
@@ -140,4 +157,24 @@ class StoreReceiveEntryController extends Controller
         // $html = view('store.supplier_details',compact('supplier'))->render();
         // return response(['html' => $html]);
     }
+
+    public function getRawMaterials(Request $request)
+    {
+        if($request->type_id)
+        {
+            $raw_materials = RawMaterial::where('type_id',$request->type_id)->get();
+            return json_encode($raw_materials);
+        }
+    }
+    public function getMaterialPurchaseOrder(Request $request)
+    {
+        if($request->raw_material_id)
+        {
+            $purchase_order = PurchaseOrder::where('raw_material_id',$request->raw_material_id)->get();
+            return json_encode($purchase_order);
+        }
+    }
+
+    
 }
+

@@ -72,5 +72,11 @@
 
 @endsection
 @push('scripts')
-
+<script src="{{asset('js/select2.min.js')}}"></script>
+    <script>
+        $("#type_id").select2({
+            placeholder:"Select Material Type",
+            allowedClear:true,
+        });
+    </script>
 @endpush

@@ -65,7 +65,68 @@
               </div>
               
     </div>
-    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">Stock Report</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="table-responsive table-hovered table-striped">
+                  <table class="table border mb-0">
+                    <thead class="table-light fw-semibold">
+                      <tr class="align-middle">
+                        <th>SNo.</th>
+                        <th>Raw Material Type</th>
+                        <th>Raw Material</th>
+                        <th>Stock</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($raw_material_list as $material)
+                          <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$material->type->name}}</td>
+                            <td>{{$material->name}}-{{$material->part_description}}</td>
+                            <td>{{$material->stock}}</td>
+                          </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header">Nesting</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="table-responsive table-hovered table-striped">
+                  <table class="table border mb-0">
+                    <thead class="table-light fw-semibold">
+                      <tr class="align-middle">
+                        <th>SNo.</th>
+                        <th>Type</th>
+                        <th>Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($nestings as $nesting)
+                          <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$nesting->nesting->name}}</td>
+                            <td>{{$nesting->type->name}}</td>
+                          </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
           <div class="card mb-4">
@@ -118,5 +179,7 @@
           </div>         
         </div>
     </div>
+
+    
   
 @endsection

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\StockingPointController;
@@ -30,9 +31,14 @@ use App\Http\Controllers\GoodReceivedNoteController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Auth::routes();
-
+// Route::get('/email/verify', function () {
+//     return view('auth.verify');
+// })->middleware('auth')->name('verification.notice');
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     $request->fulfill();
+//     return redirect('/');
+// })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -54,8 +60,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('child_part_bom/getChildPartnumber', [ChildPartBomController::class,'getChildPartnumber'])->name('getChildPartnumber');
     Route::post('child_part_bom/getRawMaterials', [ChildPartBomController::class,'getRawMaterials'])->name('getRawMaterials');
     Route::resource('process_master', ProcessMasterController::class);
+    Route::post('store_receive/getRawMaterials', [StoreReceiveEntryController::class,'getRawMaterials'])->name('store.materials');
     Route::post('store_receive/getSupplier', [StoreReceiveEntryController::class,'getSupplier'])->name('store.getSupplier');
     Route::post('store_receive/getPurchaseOrder', [StoreReceiveEntryController::class,'getPurchaseOrder'])->name('store.getPurchaseOrder');
+    Route::post('store_receive/getMaterialPurchaseOrder', [StoreReceiveEntryController::class,'getMaterialPurchaseOrder'])->name('store.getMaterialPurchaseOrder');
     Route::resource('store_receive', StoreReceiveEntryController::class);
     Route::resource('store_issue', StoreIssueEntryController::class);
     Route::resource('supplier', SupplierController::class);

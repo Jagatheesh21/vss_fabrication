@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\RawMaterial;
 use App\Models\ChildPartNumber;
 use App\Models\Nesting;
+use App\Models\NestingSequence;
 use App\Models\Operation;
 use Illuminate\Http\Request;
 use Milon\Barcode\DNS2D;
@@ -18,7 +19,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth']);
     }
 
     /**
@@ -36,6 +37,8 @@ class HomeController extends Controller
         $raw_materials = RawMaterial::count();
         $nestings = Nesting::count();
         $operations = Operation::count();
-        return view('home',compact('users','child_part_numbers','raw_materials','nestings','operations','user_lists'));
+        $raw_material_list = RawMaterial::with('stock')->get();
+        $nestings = NestingSequence::get();
+        return view('home',compact('nestings','raw_material_list','users','child_part_numbers','raw_materials','nestings','operations','user_lists'));
     }
 }
