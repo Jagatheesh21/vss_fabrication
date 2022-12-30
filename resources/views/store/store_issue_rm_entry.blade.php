@@ -20,7 +20,7 @@
   
     <div class="card">
         <div class="card-header">
-            <strong>Store - Raw Material Issue Entry</strong>
+            <strong>Store - Raw Material Issue Entry - Nesting</strong>
         </div>
         <div class="card-body">
             <div class="col-md-12">
@@ -33,7 +33,7 @@
                     <div class="row mb-3">
                       <div class="col-md-4 ">
                         <div class="form-group">
-                          <label for="" class="col-sm-4 col-form-label">Route Card #</label>
+                          <label for="" class="col-sm-6 col-form-label">Route Card #</label>
                           <input type="text" name="route_card_number" class="form-control bg-success" value="{{$route_card_number}}">
                         </div>
                       </div>
@@ -57,7 +57,7 @@
 
                       <div class="col-md-4">
                         <div class="form-group">
-                          <label class="col-sm-4 col-form-label" for="">Part Description * </label>
+                          <label class="col-sm-6 col-form-label" for="">Part Description * </label>
                           <select name="raw_material_id" id="raw_material_id" class="form-control">
                             <option value="">Select Type First</option>
                           </select>
@@ -65,7 +65,7 @@
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <label class="col-sm-6 col-form-label" for="">Purchase Order Number * </label>
+                          <label class="col-sm-8 col-form-label" for="">Purchase Order Number * </label>
                           <select name="purchase_order_id" id="purchase_order_id" class="form-control">
                             <option value="">Select Purchase Order</option>
                             @foreach ($purchase_orders as $purchase_order)
@@ -86,7 +86,7 @@
 
                       <div class="col-md-4">
                         <div class="form-group">
-                          <label for="" class="col-sm-6 col-form-label">Available Quantity *</label>
+                          <label for="" class="col-sm-8 col-form-label">Available Quantity *</label>
                           <input type="text" name="available_quantity" class="form-control" id="avaialble_quantity">
                         </div>
                       </div>
