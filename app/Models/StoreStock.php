@@ -50,4 +50,13 @@ public function raw_material(): BelongsTo
 {
     return $this->belongsTo(RawMaterial::class, 'raw_material_id');
 }
+public function category()
+{
+    return $this->belongsTo(Category::class, 'category_id');
+}
+public function type()
+{
+    return $this->belongsTo(Type::class, 'type_id');
+}
+
 }

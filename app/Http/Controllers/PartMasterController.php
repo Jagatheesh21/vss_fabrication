@@ -44,7 +44,10 @@ class PartMasterController extends Controller
      */
     public function create()
     {
-        return view('part_master.create');
+        $categories = Category::all();
+        $types = Type::where('category_id',2)->get();
+        $child_parts = ChildPartNumber::all();
+        return view('part_master.create',compact('categories','child_parts','types'));
     }
 
     /**
@@ -60,7 +63,7 @@ class PartMasterController extends Controller
             return back()->withSuccess('Part Master created Succesffully!');
         } catch (\Throwable $th) {
             //throw $th;
-            return back()->withError($th);
+            return back()->withError($th->getMessage());
         }
     }
 

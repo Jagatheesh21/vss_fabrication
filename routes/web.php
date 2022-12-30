@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('child_part_bom/getChildPartnumber', [ChildPartBomController::class,'getChildPartnumber'])->name('getChildPartnumber');
     Route::post('child_part_bom/getRawMaterials', [ChildPartBomController::class,'getRawMaterials'])->name('getRawMaterials');
     Route::resource('process_master', ProcessMasterController::class);
+    Route::get('store_receive/getConfirm/{id}', [StoreReceiveEntryController::class,'getConfirm'])->name('store.getConfirm');
     Route::post('store_receive/getRawMaterials', [StoreReceiveEntryController::class,'getRawMaterials'])->name('store.materials');
     Route::post('store_receive/getSupplier', [StoreReceiveEntryController::class,'getSupplier'])->name('store.getSupplier');
     Route::post('store_receive/getPurchaseOrder', [StoreReceiveEntryController::class,'getPurchaseOrder'])->name('store.getPurchaseOrder');

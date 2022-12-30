@@ -15,6 +15,7 @@ use Auth;
 use App\Models\StoreStock;
 use App\Http\Requests\StoreStockRMEntryRequest;
 use DB;
+use Carbon\Carbon;
 class StoreReceiveEntryController extends Controller
 {
     /**
@@ -68,7 +69,7 @@ class StoreReceiveEntryController extends Controller
         $store->save();
         DB::commit();
         // Purchase Order 
-        return redirect()->route('store_receive.edit', $store->id);
+        return redirect()->route('store.getConfirm', $store->id);
        //return response()->json(['success' => 'Store Stock Added Successfully!','status' => 200]);
        // return back()->withSuccess('Store Stock Added Successfully!');            
         } catch (\Throwable $th) {
@@ -121,7 +122,22 @@ class StoreReceiveEntryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $store = StoreStock::find($id);
+            $store->category_id = $request->category_id;
+            $store->type_id = $request->type_id;
+            $store->raw_material_id = $request->raw_material_id;
+            $store->uom_id = $request->uom_id;
+            $store->inward_quantity = $request->inward_quantity;
+            $store->confirm = 1;
+            $store->approved_by = auth()->user()->id;
+            $store->approved_date = Carbon::now();
+            $store->approved_status = 1;
+            $store->update();
+            return redirect(route('store_receive.create'))->withSuccess('GRN Confirmed Successfully!');
+        } catch (Exception $e) {
+            return back()->withError($e->getMessage());
+        }
     }
 
     /**
@@ -174,7 +190,23 @@ class StoreReceiveEntryController extends Controller
             return json_encode($purchase_order);
         }
     }
+    public function getConfirm($id)
+    {
+        $store = StoreStock::find($id);
+        $suppliers = Supplier::get();
+        $types = Type::where('category_id',1)->whereStatus(1)->get();
+        $raw_materials = RawMaterial::get();
+        $uoms = Uom::get();
+        $purchase_orders = PurchaseOrder::get();
+        $types = Type::where('category_id',1)->whereStatus(1)->get();
+        DB::commit();
+        return view('store.grn_approval',compact('store','types','purchase_orders','raw_materials','suppliers','uoms'));
+    }
 
+    public function approval(Request $request)
+    {
+
+    }
     
 }
 
