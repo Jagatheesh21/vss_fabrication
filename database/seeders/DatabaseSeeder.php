@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             OperationSeeder::class,
             UomSeeder::class,
             ChildPartNumberSeeder::class,
+            NestingSeeder::class
         ]);
     }
 }

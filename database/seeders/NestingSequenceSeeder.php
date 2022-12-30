@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use App\Models\Nesting;
+use App\Models\NestingSequence;
 class NestingSequenceSeeder extends Seeder
 {
     /**
@@ -14,6 +15,6 @@ class NestingSequenceSeeder extends Seeder
      */
     public function run()
     {
-        //
+        
     }
 }
