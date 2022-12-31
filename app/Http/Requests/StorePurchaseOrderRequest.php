@@ -29,6 +29,8 @@ class StorePurchaseOrderRequest extends FormRequest
             'raw_material_id' => 'required',
             'purchase_order_date' => 'required',
             'quantity' => 'required',
+            'unit_quantity' => 'required',
+            'total_quantity' => 'required',
             'uom_id' => 'required',
         ];
     }

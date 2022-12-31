@@ -65,9 +65,23 @@
                         @enderror
                       </div>
                       <div class="col-md-6">
+                        <label for="name" class="col-sm-6 col-form-label required">Unit Quantity*</label>
+                        <input type="number" name="unit_quantity" id="unit_quantity" class="form-control">
+                        @error('unit_quantity')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                      <div class="col-md-6">
                         <label for="name" class="col-sm-6 col-form-label required">Quantity*</label>
                         <input type="number" name="quantity" id="quantity" class="form-control">
                         @error('quantity')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                      <div class="col-md-6">
+                        <label for="name" class="col-sm-6 col-form-label required">Total Quantity*</label>
+                        <input type="number" readonly name="total_quantity" id="total_quantity" class="form-control">
+                        @error('total_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                       </div>
@@ -99,6 +113,12 @@
         $("#raw_material_id").select2({
             placeholder:"Select Part Description",
             allowedClear:true,
+        });
+        $("#quantity").change(function(){
+          var unit = $("#unit_quantity").val();
+          var quantity = $("#quantity").val();
+          var total_quantity = unit*quantity;
+          $("#total_quantity").val(total_quantity);
         });
     </script>
 @endpush

@@ -63,14 +63,23 @@ class GeneralController extends Controller
         }
         
     }  
+    public function getGrns(Request $request)
+    {
+        if($request->raw_material_id)
+        {
+            $raw_material_id = $request->raw_material_id;
+
+            $grn_numbers = StoreStock::where('raw_material_id',$raw_material_id)->get();
+            return json_encode($grn_numbers);
+        }
+    }
     public function getNestings(Request $request)
     {
         if($request->raw_material_id)
         {
             $raw_material_id = $request->raw_material_id;
             $nestings = ChildPartBom::with('nesting')->where('raw_material_id',$raw_material_id)->GroupBy('nesting_id')->get();
-            $html = view('general.nestings',compact('nestings'))->render();
-            return response(['html' => $html]);
+            return json_encode($nestings);
         }
     }  
     public function getNestingList(Request $request)
@@ -109,13 +118,15 @@ class GeneralController extends Controller
     }      
     public function getAvailableQuantity(Request $request)
     {
-        if($request->purchase_order_id)
+        if($request->store_stock_id)
         {
-            $purchase_order_id = $request->purchase_order_id;
-            $purchase = PurchaseOrder::find($purchase_order_id); 
-            $total_quantity = $purchase->quantity;
-            StoreStock::where('purchase_order_id',$purchase_order_id)->where('issued_quantity')->get();
-
+            $store_stock_id = $request->store_stock_id;
+            $purchase = StoreStock::find($store_stock_id); 
+            return $purchase->available_quantity;
+            // $nestings = ChildPartBom::where('raw_material_id',$purchase->raw_material_id)->GroupBy('nesting_id')->get();
+            // $html = view('store.nesting_list',compact('nestings'))->render();
+            // return response(['purchase'=>$purchase,'html' =>$html]);
+            
         }
     }
 }

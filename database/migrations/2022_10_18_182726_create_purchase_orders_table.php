@@ -19,7 +19,9 @@ return new class extends Migration
             $table->integer('supplier_id');
             $table->integer('raw_material_id');
             $table->integer('uom_id');
-            $table->double('quantity');
+            $table->decimal('quantity',16,0);
+            $table->decimal('unit_quantity',16,0);
+            $table->decimal('total_quantity',16,0);
             $table->timestamp('purchase_order_date')->useCurrent();
             $table->integer('status')->default(1);
             $table->softDeletes();

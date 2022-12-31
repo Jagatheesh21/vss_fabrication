@@ -74,7 +74,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/materials', [GeneralController::class,'getMaterials'])->name('general.materials');
     Route::post('/suppliers', [GeneralController::class,'getSuppliers'])->name('general.suppliers');
     Route::post('/nestings', [GeneralController::class,'getNestings'])->name('general.nestings');
+    Route::post('/grn_numbers', [GeneralController::class,'getGrns'])->name('general.grns');
     Route::post('/nesting_sequences', [GeneralController::class,'getNestingSequences'])->name('general.nesting_sequences');
+    Route::post('/nesting_list', [GeneralController::class,'getNestingList'])->name('general.nesting_list');
     Route::post('/nesting_part_numbers', [GeneralController::class,'getNestingPartNumbers'])->name('general.nesting_part_numbers');
     Route::post('/avaialable_quantity', [GeneralController::class,'getAvailableQuantity'])->name('general.avaialable_quantity');
 });

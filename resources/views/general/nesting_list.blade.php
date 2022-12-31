@@ -10,7 +10,7 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label class="col-sm-6 col-form-label" for="">Child Part Number* </label>
+            <label class="col-sm-8 col-form-label" for="">Child Part Number* </label>
             <select name="child_part_number_id" id="child_part_number_id" class="form-control select2">
                 <option value="">Select Nesting Type First</option>
             </select>

@@ -63,43 +63,50 @@
                           </select>
                         </div>
                       </div>
+
                       <div class="col-md-4">
                         <div class="form-group">
-                          <label class="col-sm-8 col-form-label" for="">Purchase Order Number * </label>
-                          <select name="purchase_order_id" id="purchase_order_id" class="form-control">
-                            <option value="">Select Purchase Order</option>
-                            @foreach ($purchase_orders as $purchase_order)
-                                <option value="{{$purchase_order->id}}">{{$purchase_order->purchase_order_number}}</option>
-                            @endforeach
+                          <label class="col-sm-8 col-form-label" for="">GRN Number * </label>
+                          <select name="store_stock_id" id="store_stock_id" class="form-control">
+                            <option value="">Select GRN</option>
+                            
                           </select>
                         </div>
                       </div>
 
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label class="col-sm-6 col-form-label" for="">Supplier * </label>
-                          <select name="supplier_id" id="supplier_id" class="form-control">
-                            <option value="">Select Purchase Order First</option>
-                          </select>
-                        </div>
-                      </div>
-
+                      
                       <div class="col-md-4">
                         <div class="form-group">
                           <label for="" class="col-sm-8 col-form-label">Available Quantity *</label>
                           <input type="text" name="available_quantity" class="form-control" id="avaialble_quantity">
                         </div>
                       </div>
-                      <div class="col-md-4">
+
+                      <div class="col-md-4 sheet" style="display: none;">
                         <div class="form-group">
-                          <label for="" class="col-sm-6 col-form-label">Issue Quantity *</label>
-                          <input type="text" name="issue_quantity" class="form-control" id="issue_quantity">
+                          <label for="" class="col-sm-6 col-form-label">Type Of Issue *</label>
+                          <select name="type_of_issue" id="type_of_issue" class="form-control select2">
+                            <option value="">Select Type</option>
+                            <option value="1">Nesting</option>
+                            <option value="2">Unit Weight</option>
+                          </select>
                         </div>
                       </div>
-                      <div class="col-md-4" id="list_view">
+                      <div class="col-md-4 sheet" style="display: none;">
+                        <div class="form-group">
+                          <label for="" class="col-sm-6 col-form-label">Nesting *</label>
+                          <select name="nesting_id" id="nesting_id" class="form-control select2">
+                            <option value="">Select Nesting</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12" id="list_view">
 
                       </div>
-
                     </div>
                     <div class="row mb-0">
                         <div class="col-md-8 offset-md-4">
@@ -114,7 +121,7 @@
 @endsection
 {{-- @livewireScripts --}}
 @push('scripts')
-<script src="{{asset("js/select2.min.js")}}"></script>
+<script src="{{asset('js/select2.min.js')}}"></script>
 
   <script>
   $("#category_id").select2();
@@ -140,6 +147,9 @@
     if(type_id>1)
     {
       $("#nesting_view").html(" ");
+      $(".sheet").hide();
+    }else{
+      $(".sheet").show();
     }
     $.ajax({
       url:"{{route('general.materials')}}",
@@ -191,33 +201,93 @@
     if(type_id==1)
     {
       $.ajax({
-        url:"{{route('general.nestings')}}",
+        url:"{{route('general.grns')}}",
         type:"POST",
         data:{type_id:type_id,raw_material_id:raw_material_id},
         success:function(response)
         {
-          $("#list_view").html(response.html);
-          $("#nesting_id").select2();
+          
+            var data = JSON.parse(response);
+            
+            if(data!='')
+            {
+            $("#store_stock_id").append("<option value=''>Select GRN</option>");
+            $.each(data, function (i, item) {
+              $("#store_stock_id").append("<option value='"+item.id+"'>" + item.grn_number + "</option>");
+            });
+            $("#store_stock_id").select2({
+            allowedClear:true,
+            placeholder:'Select GRN'
+            });
+          }else{
+            $("#store_stock_id").html(" ");
+            $("#store_stock_id").val(false).trigger( "change" );
+            $("#avaialable_quantity").val(" ");
+          }
+          
         }
+
       });
+    }else{
+            $("#store_stock_id").val("");
+            $("#avaialable_quantity").val("");
+
     }
-    if(type_id>1)
-    { 
-      $("#list_view").html(" ");
+  });
+  $('body').on('change','#store_stock_id',function(e){
+    e.preventDefault();
+    var type_id = $("#type_id").val();
+    $.ajax({
+      url:"{{route('general.avaialable_quantity')}}",
+      type:"POST",
+      data:{store_stock_id:$(this).val(),type_id:type_id},
+      success:function(response){
+        //alert(response.purchase);
+        //var result = JSON.parse(response);
+        //alert(result.purchase);
+      $("#avaialble_quantity").val(response);
+        // $.each(result.nestings, function (i, item) {
+        //       $("#list_view").append("<tr><td><div class='form-group'><input type='text' name='nesting_id[]' value='+item.nesting.name+'></div></td></tr>");
+        //     });
+      }
+    });
+    });  
+  $('body').on('change','#type_of_issue',function(e){
+  e.preventDefault();
+  var raw_material_id = $("#raw_material_id").val();
+  if($(this).val()==1)
+  {
+
+  $.ajax({
+    url:"{{route('general.nestings')}}",
+    type:"POST",
+    data:{raw_material_id,raw_material_id},
+    success:function(response)
+    {
+      var result = JSON.parse(response);
+      $.each(result, function (i, item) {
+              $("#nesting_id").append("<option value='"+item.nesting.id+"'>"+item.nesting.name+"</option>");
+            });
+      $("#nesting_id").select2();
     }
+  });
+  }
+    if($(this).val()==2)
+  {
+
+  }
   });
   $('body').on('change','#nesting_id',function(e){
     e.preventDefault();
     var nesting_id = $(this).val();
     var raw_material_id = $("#raw_material_id").val();
       $.ajax({
-        url:"{{route('general.nesting_sequences')}}",
+        url:"{{route('general.nesting_list')}}",
         type:"POST",
         data:{nesting_id:nesting_id,raw_material_id:raw_material_id},
         success:function(response)
         {
-          $("#nesting_type_id").html(response.html);
-          $("#nesting_type_id").select2();
+          $("#list_view").html(response.html);
         }
       });
       
@@ -226,9 +296,6 @@
     var nesting_type_id = $(this).val();
     var nesting_id = $("#nesting_id").val();
     var raw_material_id = $("#raw_material_id").val();
-    // alert(nesting_id);
-    // alert(nesting_type_id);
-    // alert(raw_material_id);
       $.ajax({
         url:"{{route('general.nesting_part_numbers')}}",
         type:"POST",

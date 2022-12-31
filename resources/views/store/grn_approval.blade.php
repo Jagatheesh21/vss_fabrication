@@ -123,7 +123,7 @@
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-6 col-form-label required">Available Quantity*</label>
                       <div class="form-group">
-                      <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control" value="{{$store->purchase_order->quantity}}">
+                      <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control" value="{{$store->purchase_order->total_quantity}}">
                       </div>
                     </div>
                     <div class="col-sm-4">

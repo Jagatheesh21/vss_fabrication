@@ -29,7 +29,7 @@
                   @method('POST')
                   <div class="row mb-3">
                     <div class="col-sm-4">
-                      <label for="grn_number" class="col-sm-6 col-form-label control-label-required">GRN Number*</label>
+                      <label for="grn_number" class="col-sm-4 col-form-label control-label-required">GRN Number*</label>
                       <div class="form-group">
                         <input type="text" name="grn_number" id="grn_number" class="form-control" readonly value="{{$grn_number}}" >
                       </div>
@@ -51,7 +51,7 @@
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-6 col-form-label required">Raw Material*</label>
+                      <label for="name" class="col-sm-4 col-form-label required">Raw Material*</label>
                       <div class="form-group">
                         <select name="raw_material_id" id="raw_material_id" class="form-control select2">
                         </select>
@@ -61,7 +61,7 @@
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm- col-form-label required">Purchase Order*</label>
+                      <label for="name" class="col-sm-4 col-form-label required">Purchase Order*</label>
                       <div class="form-group">
                         <select name="purchase_order_id" id="purchase_order_id" class="form-control select2">
                         </select>
@@ -278,7 +278,7 @@ $("#purchase_order_id").change(function(e){
         $("#raw_material_id").html('<option value='+response.test.raw_material.id+'>'+response.test.raw_material.name+'-'+response.test.raw_material.part_description+'</option>');
         $("#type_id").html('<option value='+response.type.id+'>'+response.type.name+'</option>');
         $("#uom_id").html('<option value='+response.test.uom.id+'>'+response.test.uom.name+'</option>');
-        $("#available_quantity").val(response.test.quantity);
+        $("#available_quantity").val(response.test.total_quantity);
       }
     });
   }
