@@ -62,4 +62,5 @@ public function child_part_number()
 {
     return $this->belongsTo(ChildPartNumber::class, 'child_part_number_id');
 }
+  
 }

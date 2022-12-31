@@ -129,6 +129,7 @@ class StoreReceiveEntryController extends Controller
             $store->raw_material_id = $request->raw_material_id;
             $store->uom_id = $request->uom_id;
             $store->inward_quantity = $request->inward_quantity;
+            $store->available_quantity = $request->inward_quantity;
             $store->confirm = 1;
             $store->approved_by = auth()->user()->id;
             $store->approved_date = Carbon::now();

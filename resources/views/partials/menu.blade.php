@@ -39,11 +39,12 @@
       <ul class="nav-group-items">
         <li class="nav-item"><a class="nav-link" href="{{route("store_receive.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>      
         <li class="nav-item"><a class="nav-link" href="{{route("store_issue.create")}}"><span class="nav-icon"></span> Store Issue RM </a></li>      
-        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Receive Child Part </a></li>      
-        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Issue Child Part </a></li>      
+        <li class="nav-item"><a class="nav-link" href="{{route("store_issue.dc_issuance")}}"><span class="nav-icon"></span> DC Issuance </a></li>      
+        {{-- <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Receive Child Part </a></li>      
+        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Issue Child Part </a></li>       --}}
       </ul>
     </li>
-    <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+    {{-- <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass
         ')}}"></use>
@@ -51,7 +52,7 @@
       <ul class="nav-group-items">
         <li class="nav-item"><a class="nav-link" href="{{route('good_received_note.index')}}"><span class="nav-icon"></span> GRN Generation </a></li>      
       </ul>
-    </li>
+    </li> --}}
 
     {{-- REPORTS --}}
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">

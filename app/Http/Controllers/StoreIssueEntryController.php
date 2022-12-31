@@ -7,6 +7,8 @@ use App\Http\Requests\StoreIssueEntryRequest;
 use App\Models\StoreStock;
 use App\Models\ChildPartNumber;
 use App\Models\Category;
+use App\Models\ChildPartBom;
+use App\Models\Operation;
 use App\Models\Type;
 use App\Models\RawMaterial;
 use App\Models\Nesting;
@@ -34,7 +36,7 @@ class StoreIssueEntryController extends Controller
      */
     public function create(Request $request)
     {
-       
+
         $child_part_numbers = ChildPartNumber::whereStatus(1)->get();
         $raw_materials = RawMaterial::whereStatus(1)->get();
         $category = Category::find(1);
@@ -118,5 +120,14 @@ class StoreIssueEntryController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function getChildPartNumbers(Request $request)
+    {
+        
+    }
+    public function getDcIssuance()
+    {
+        $stocking_points = Operation::all();
+        return view('store.dc_issuance',compact('stocking_points'));
     }
 }

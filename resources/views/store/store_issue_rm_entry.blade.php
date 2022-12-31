@@ -100,8 +100,6 @@
                           </select>
                         </div>
                       </div>
-                      
-
                     </div>
                     <div class="row">
                       <div class="col-md-12" id="list_view">
@@ -184,7 +182,6 @@
     //alert($(this).val());
     var purchase_order_id = $("#purchase_order_id").val();
     var supplier_id = $(this).val();
-    alert(purchase_order_id);
     $.ajax({
       url:"{{route('general.avaialable_quantity')}}",
       type:"POST",
@@ -242,13 +239,7 @@
       type:"POST",
       data:{store_stock_id:$(this).val(),type_id:type_id},
       success:function(response){
-        //alert(response.purchase);
-        //var result = JSON.parse(response);
-        //alert(result.purchase);
       $("#avaialble_quantity").val(response);
-        // $.each(result.nestings, function (i, item) {
-        //       $("#list_view").append("<tr><td><div class='form-group'><input type='text' name='nesting_id[]' value='+item.nesting.name+'></div></td></tr>");
-        //     });
       }
     });
     });  
@@ -257,20 +248,19 @@
   var raw_material_id = $("#raw_material_id").val();
   if($(this).val()==1)
   {
-
-  $.ajax({
-    url:"{{route('general.nestings')}}",
-    type:"POST",
-    data:{raw_material_id,raw_material_id},
-    success:function(response)
-    {
-      var result = JSON.parse(response);
-      $.each(result, function (i, item) {
-              $("#nesting_id").append("<option value='"+item.nesting.id+"'>"+item.nesting.name+"</option>");
-            });
-      $("#nesting_id").select2();
-    }
-  });
+    $.ajax({
+      url:"{{route('general.nestings')}}",
+      type:"POST",
+      data:{raw_material_id,raw_material_id},
+      success:function(response)
+      {
+        var result = JSON.parse(response);
+        $.each(result, function (i, item) {
+                $("#nesting_id").append("<option value='"+item.nesting.id+"'>"+item.nesting.name+"</option>");
+              });
+        $("#nesting_id").select2();
+      }
+    });
   }
     if($(this).val()==2)
   {

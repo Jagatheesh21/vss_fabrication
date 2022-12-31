@@ -87,9 +87,10 @@ class GeneralController extends Controller
         if($request->nesting_id)
         {
             $nesting_id = $request->nesting_id;
+            $nesting_types = Type::where('category_id',2)->get();
             $raw_material_id = $request->raw_material_id;
             $nesting_sequences = ChildPartBom::with(['nesting_type','child_part_number'])->where('nesting_id',$nesting_id)->where('raw_material_id',$raw_material_id)->GroupBy('nesting_type_id')->get();
-            $html = view('general.nesting_list',compact('nesting_sequences'))->render();
+            $html = view('general.nesting_list',compact('nesting_sequences','nesting_types'))->render();
             return response(['html' => $html]);
         }
     }
