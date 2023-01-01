@@ -16,4 +16,9 @@ class Type extends Model
         return $this->belongsTo(Category::class);
     }
     
+    public function child_part_numbers()
+    {
+        return $this->belongsToMany(ChildPartBom::class);
+    }
+
 }

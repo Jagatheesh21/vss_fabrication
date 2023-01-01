@@ -5,7 +5,8 @@
         </svg> Dashboard
         </a>
       </li>
-    
+    @if (auth()->user()->id==1)
+
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-puzzle')}}"></use>
@@ -24,6 +25,7 @@
         <li class="nav-item"><a class="nav-link" href="{{route('supplier.index')}}"><span class="nav-icon"></span> Supplier </a></li>  
       </ul>
     </li>
+    @endif
     {{-- <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-library-building')}}"></use>

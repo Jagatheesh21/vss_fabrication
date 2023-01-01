@@ -62,5 +62,7 @@ public function child_part_number()
 {
     return $this->belongsTo(ChildPartNumber::class, 'child_part_number_id');
 }
-  
+public function scopeChildPartNumbers($query) {
+    $query->where('nesting_id',$this->nesting_id)->where('nesting_type_id',$this->nesting_type_id);
+}
 }

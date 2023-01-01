@@ -67,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('store_receive/getMaterialPurchaseOrder', [StoreReceiveEntryController::class,'getMaterialPurchaseOrder'])->name('store.getMaterialPurchaseOrder');
     Route::resource('store_receive', StoreReceiveEntryController::class);
     Route::post('store_issue/getChildPartNumbers', [StoreIssueEntryController::class,'getChildPartNumbers'])->name('store.nesting_child_parts');
+    Route::post('store_issue/getNestingQuantity', [StoreIssueEntryController::class,'getNestingQuantity'])->name('store.nesting_quantity');
     Route::get('store_issue/getDcIssuance', [StoreIssueEntryController::class,'getDcIssuance'])->name('store_issue.dc_issuance');
     Route::resource('store_issue', StoreIssueEntryController::class);
     Route::resource('supplier', SupplierController::class);

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 {{-- @livewireStyles --}}
 @section('content')
@@ -84,7 +84,7 @@
 
                       <div class="col-md-4 sheet" style="display: none;">
                         <div class="form-group">
-                          <label for="" class="col-sm-6 col-form-label">Type Of Issue *</label>
+                          <label for="" class="col-sm-8 col-form-label">Type Of Issue *</label>
                           <select name="type_of_issue" id="type_of_issue" class="form-control select2">
                             <option value="">Select Type</option>
                             <option value="1">Nesting</option>
@@ -108,7 +108,7 @@
                     </div>
                     <div class="row mb-0">
                         <div class="col-md-8 offset-md-4">
-                           <button type="submit" id="submit" class="btn btn-primary">Save</button>
+                           <button type="button" id="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                   </form>
@@ -120,10 +120,46 @@
 {{-- @livewireScripts --}}
 @push('scripts')
 <script src="{{asset('js/select2.min.js')}}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
   $("#category_id").select2();
   $("#purchase_order_id").select2();
+  $("body").on("click","#submit",function(e){
+      e.preventDefault();
+      $.ajax({
+        url:"{{route('store_issue.store')}}",
+        type:"POST",
+        data:$("#operation_save").serialize(),
+        success:function(response)
+        {
+          $.toast({
+                  heading: 'Success',
+                  text: response,
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'success'
+              });
+          
+              location.reload(true);
+        },
+        error:function(result)
+        {
+          var response = $.parseJSON(result.responseText);
+            $.each(response.errors, function(key, val) {
+              $.toast({
+                  heading: 'Error',
+                  text: val,
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'error'
+              })
+            })
+
+        }
+      });
+      
+
+    }); 
   $('body').on('change','#category_id',function(){
     var category_id = $(this).val();
     $.ajax({
@@ -148,6 +184,8 @@
       $(".sheet").hide();
     }else{
       $(".sheet").show();
+      $("#type_of_issue").select2();
+
     }
     $.ajax({
       url:"{{route('general.materials')}}",
@@ -280,24 +318,24 @@
           $("#list_view").html(response.html);
         }
       });
-      
-  $('body').on('change','#nesting_type_id',function(e){
-    e.preventDefault();
-    var nesting_type_id = $(this).val();
-    var nesting_id = $("#nesting_id").val();
-    var raw_material_id = $("#raw_material_id").val();
-      $.ajax({
-        url:"{{route('general.nesting_part_numbers')}}",
-        type:"POST",
-        data:{nesting_id:nesting_id,raw_material_id:raw_material_id,nesting_type_id:nesting_type_id},
-        success:function(response)
-        {
-          console.log(response.html);
-          $("#child_part_number_id").html(response.html);
-          $("#child_part_number_id").select2();
-        }
-      }); 
-  });
+
+  // $('body').on('change','#nesting_type_id',function(e){
+  //   e.preventDefault();
+  //   var nesting_type_id = $(this).val();
+  //   var nesting_id = $("#nesting_id").val();
+  //   var raw_material_id = $("#raw_material_id").val();
+  //     $.ajax({
+  //       url:"{{route('general.nesting_part_numbers')}}",
+  //       type:"POST",
+  //       data:{nesting_id:nesting_id,raw_material_id:raw_material_id,nesting_type_id:nesting_type_id},
+  //       success:function(response)
+  //       {
+  //         console.log(response.html);
+  //         $("#child_part_number_id").html(response.html);
+  //         $("#child_part_number_id").select2();
+  //       }
+  //     }); 
+  // });
   });
   </script>
 @endpush

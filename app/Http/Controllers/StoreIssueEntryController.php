@@ -16,6 +16,7 @@ use App\Models\NestingSequence;
 use App\Models\StoreTransaction;
 use App\Models\RouteCardTransaction;
 use App\Models\PurchaseOrder;
+use Auth;
 
 class StoreIssueEntryController extends Controller
 {
@@ -36,12 +37,11 @@ class StoreIssueEntryController extends Controller
      */
     public function create(Request $request)
     {
-
         $child_part_numbers = ChildPartNumber::whereStatus(1)->get();
         $raw_materials = RawMaterial::whereStatus(1)->get();
         $category = Category::find(1);
         $types = Type::where('category_id',1)->where('status',1)->get();
-        $route_card_number = StoreTransaction::getNextRouteCardNumber();
+        $route_card_number = RouteCardTransaction::getNextRouteCardNumber(1);
         $nestings = Nesting::where('status',1)->get();
         $purchase_orders = PurchaseOrder::where('status',1)->get();
 
@@ -56,19 +56,28 @@ class StoreIssueEntryController extends Controller
      */
     public function store(StoreIssueEntryRequest $request)
     {
-       
+
         try {
             //StoreTransaction::create($request->validated());
+            $nesting_types = $request->input('nesting_type_id');
             $child_part_numbers = $request->input('child_part_number_id');
-            if($child_part_numbers->count()>0)
+            $unit_weights = $request->input('unit_weight');
+            $useage_weights = $request->input('useage_weight');
+            $estimate_quantities = $request->input('estimate_quantity');
+            $nesting_types = $request->input('nesting_type_id');
+            foreach($nesting_types as $key=>$nesting_type)
             {
-                dd($child_part_numbers->count());
+                $rc = new RouteCardTransaction;
+                $rc->route_card_type_id = $request->route_card_type_id;
+                $rc->route_card_number = $request->route_card_number;
+                $rc->issued_raw_material_quantity = $useage_weights[$key];
+                $rc->issued_quantity = $estimate_quantities[$key];
+                $rc->ip_address = $request->ip();
+                $rc->user_id = auth()->user()->id;
+                $rc->raw_material_id = $request->input('raw_material_id');
+                $rc->child_part_number_id = $child_part_numbers[$key];
+                $rc->save();
             }
-            $rc = new RouteCardTransaction;
-            $rc->ip_address = $request->ip();
-            $rc->raw_material_id = $request->input('raw_material_id');
-
-            $rc->child_part_number_id = $request->input('child_part_number_id');
             return back()->withSuccess('Route Card Generated Successfully!');
         } catch (\Throwable $th) {
             //throw $th;
@@ -123,11 +132,27 @@ class StoreIssueEntryController extends Controller
     }
     public function getChildPartNumbers(Request $request)
     {
-        
+        $raw_material_id = $request->raw_material_id;
+        $nesting_id = $request->nesting_id;
+        $nesting_type_id = $request->nesting_type_id;
+        $bom_child_part_numbers = ChildPartBom::select('child_part_number_id')->where('raw_material_id',$raw_material_id)->where('nesting_id',$nesting_id)->where('nesting_type_id',$nesting_type_id)->get();
+        $part_numbers = ChildPartNumber:: select ('*')
+        ->whereIn('id', $bom_child_part_numbers)
+        ->get();
+        return json_encode($part_numbers);
     }
     public function getDcIssuance()
     {
         $stocking_points = Operation::all();
         return view('store.dc_issuance',compact('stocking_points'));
+    }
+    public function getNestingQuantity(Request $request)
+    {
+        $raw_material_id = $request->raw_material_id;
+        $nesting_id = $request->nesting_id;
+        $nesting_type_id = $request->nesting_type_id;
+        $child_part_number_id = $request->child_part_number_id;
+        $bom = ChildPartBom::select('quantity')->where('raw_material_id',$raw_material_id)->where('nesting_id',$nesting_id)->where('nesting_type_id',$nesting_type_id)->where('child_part_number_id',$child_part_number_id)->first();
+        return $bom->quantity;
     }
 }
