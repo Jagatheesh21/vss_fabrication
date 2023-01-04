@@ -66,7 +66,7 @@
               
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="card mb-4">
           <div class="card-header">Stock Report</div>
           <div class="card-body">
@@ -97,7 +97,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      {{-- <div class="col-md-6">
         <div class="card mb-4">
           <div class="card-header">Nesting</div>
           <div class="card-body">
@@ -125,7 +125,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
     </div>
     <div class="row">
         <div class="col-md-12">

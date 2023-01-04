@@ -175,7 +175,7 @@
           var data = JSON.parse(response);
         $("#purchase_order_id").append("<option value=''>Select Purchase Order</option>");
         $.each(data, function (i, item) {
-          $("#purchase_order_id").append("<option value='"+item.id+"'>" + item.purchase_order_number + "</option>");
+          $("#purchase_order_id").append("<option value='"+item.purchase_order_id+"'>" + item.purchase_order.purchase_order_number + "</option>");
         });
         $("#purchase_order_id").select2({
         allowedClear:true,
@@ -274,11 +274,11 @@ $("#purchase_order_id").change(function(e){
       type:"POST",
       success:function(response)
       {
-        $("#supplier_id").html('<option value='+response.test.supplier.id+'>'+response.test.supplier.name+'</option>');
+        $("#supplier_id").html('<option value='+response.supplier.id+'>'+response.supplier.name+'</option>');
         $("#raw_material_id").html('<option value='+response.test.raw_material.id+'>'+response.test.raw_material.name+'-'+response.test.raw_material.part_description+'</option>');
         $("#type_id").html('<option value='+response.type.id+'>'+response.type.name+'</option>');
         $("#uom_id").html('<option value='+response.test.uom.id+'>'+response.test.uom.name+'</option>');
-        $("#available_quantity").val(response.test.total_quantity);
+        $("#available_quantity").val(response.test.quantity);
       }
     });
   }

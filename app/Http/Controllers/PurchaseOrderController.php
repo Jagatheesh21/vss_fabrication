@@ -9,7 +9,7 @@ use App\Http\Requests\StorePurchaseOrderRequest;
 use App\Http\Requests\UpdatePurchaseOrderRequest;
 use Illuminate\Http\Request;
 use Datatables;
-
+use PDF;
 class PurchaseOrderController extends Controller
 {
     /**
@@ -50,7 +50,7 @@ class PurchaseOrderController extends Controller
         $po_number = PurchaseOrder::getNextPurchaseOrderNumber();
         $raw_materials = RawMaterial::whereStatus(1)->get();
         $suppliers = Supplier::whereStatus(1)->get();
-        return view('purchase_order.create',compact('po_number','raw_materials','suppliers'));
+        return view('purchase_order.purchase_order',compact('po_number','raw_materials','suppliers'));
     }
 
     /**
@@ -113,5 +113,17 @@ class PurchaseOrderController extends Controller
     public function destroy(PurchaseOrder $purchaseOrder)
     {
         //
+    }
+    public function print($id)
+    {
+        
+        if($id)
+        {
+            $purchase_order = PurchaseOrder::with('purchase_order_items')->find($id);
+            $view = view('purchase_order.print',compact('purchase_order'))->render();
+            //view()->share('purchase_order.print',compact('purchase_order'));
+            $pdf = PDF::loadView($view);
+            return $pdf->download($view);
+        }
     }
 }

@@ -155,4 +155,6 @@ class StoreIssueEntryController extends Controller
         $bom = ChildPartBom::select('quantity')->where('raw_material_id',$raw_material_id)->where('nesting_id',$nesting_id)->where('nesting_type_id',$nesting_type_id)->where('child_part_number_id',$child_part_number_id)->first();
         return $bom->quantity;
     }
+    
 }
+

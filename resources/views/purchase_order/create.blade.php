@@ -66,7 +66,7 @@
                       </div>
                       <div class="col-md-6">
                         <label for="name" class="col-sm-6 col-form-label required">Unit Quantity*</label>
-                        <input type="number" name="unit_quantity" id="unit_quantity" class="form-control">
+                        <input type="text" name="unit_quantity" id="unit_quantity" class="form-control">
                         @error('unit_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror

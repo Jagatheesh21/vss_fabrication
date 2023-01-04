@@ -15,15 +15,15 @@ class StoreStockObserver
      */
     public function created(StoreStock $storeStock)
     {
-        $total_inward_quantity = StoreStock::where('purchase_order_id',$storeStock->purchase_order_id)->sum('inward_quantity');
-        $purchase =  PurchaseOrder::find($storeStock->purchase_order_id);
-       if($purchase->useage_quantity==$total_inward_quantity)
-       {
-        $purchase->closed_date = now();
-       }else{
-        $purchase->useage_quantity = $purchase->useage_quantity+$storeStock->inward_quantity;
-       }
-       $purchase->update();
+    //     $total_inward_quantity = StoreStock::where('purchase_order_id',$storeStock->purchase_order_id)->sum('inward_quantity');
+    //     $purchase =  PurchaseOrder::find($storeStock->purchase_order_id);
+    //    if($purchase->useage_quantity==$total_inward_quantity)
+    //    {
+    //     $purchase->closed_date = now();
+    //    }else{
+    //     $purchase->useage_quantity = $purchase->useage_quantity+$storeStock->inward_quantity;
+    //    }
+    //    $purchase->update();
     }
 
     /**

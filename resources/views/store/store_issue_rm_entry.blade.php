@@ -182,7 +182,8 @@
     {
       $("#nesting_view").html(" ");
       $(".sheet").hide();
-    }else{
+    
+      }else{
       $(".sheet").show();
       $("#type_of_issue").select2();
 
@@ -264,9 +265,17 @@
 
       });
     }else{
-            $("#store_stock_id").val("");
-            $("#avaialable_quantity").val("");
-
+      $("#store_stock_id").val("");
+      $("#avaialable_quantity").val("");
+      $.ajax({
+        url:"{{route('store.getChildPartNumber')}}",
+        type:"POST",
+        data:{type_id:type_id,raw_material_id:raw_material_id},
+        success:function(response)
+        { 
+          
+        }
+      });
     }
   });
   $('body').on('change','#store_stock_id',function(e){

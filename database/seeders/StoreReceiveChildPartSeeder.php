@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RawMaterialSeeder extends Seeder
+class StoreReceiveChildPartSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class RawMaterialSeeder extends Seeder
      */
     public function run()
     {
-        
+        //
     }
 }

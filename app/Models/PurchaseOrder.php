@@ -20,7 +20,7 @@ class PurchaseOrder extends Model
         // We get here if there is no order at all
         // If there is no number set it to 0, which will be 1 at the end.
         $number = 0;
-        $po = 'PO'.date('y'). sprintf('%04d', intval($number) + 1);
+        $po = 'PO'.date('y'). sprintf('%05d', intval($number) + 1);
     }
     else 
     {    
@@ -47,12 +47,9 @@ public function supplier()
 {
     return $this->belongsTo(Supplier::class, 'supplier_id');
 }
-public function raw_material()
+public function purchase_order_items()
 {
-    return $this->belongsTo(RawMaterial::class, 'raw_material_id');
+    return $this->hasMany(PurchaseOrderItem::class,'purchase_order_id');
 }
-public function uom()
-{
-    return $this->belongsTo(Uom::class, 'uom_id');
-}
+
 }

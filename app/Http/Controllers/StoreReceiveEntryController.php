@@ -9,6 +9,7 @@ use App\Models\ChildPartNumber;
 use App\Models\RawMaterial;
 use App\Models\Nesting;
 use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderItem;
 use App\Models\Supplier;
 use App\Models\Uom;
 use Auth;
@@ -35,9 +36,7 @@ class StoreReceiveEntryController extends Controller
      */
     public function create()
     {
-        //dd(StoreStock::where('purchase_order_id',1)->sum('inward_quantity'));
         $grn_number = StoreStock::getNextGrnNumber(); 
-        //$categories = Category::whereStatus(1)->get();
         $types = Type::where('category_id',1)->whereStatus(1)->get();
         return view('store.store_receive_rm_entry',compact('grn_number','types'));
     }
@@ -165,12 +164,12 @@ class StoreReceiveEntryController extends Controller
         $purchase_order_id = $request->input('purchase_order_id');
         $purchase_order = PurchaseOrder::find($purchase_order_id);
         $supplier = Supplier::find($purchase_order->supplier_id);
-        $test = PurchaseOrder::with(['supplier','uom','raw_material'])
-        ->where('id',$request->input('purchase_order_id'))
+        $test = PurchaseOrderItem::with(['uom','raw_material'])
+        ->where('purchase_order_id',$request->input('purchase_order_id'))
         ->first();
         $type = Type::find($test->raw_material->type_id);
         StoreStock::where('purchase_order_id');
-        return response(['test' => $test,'type' => $type]);
+        return response(['test' => $test,'type' => $type,'supplier'=>$supplier]);
         // $html = view('store.supplier_details',compact('supplier'))->render();
         // return response(['html' => $html]);
     }
@@ -187,7 +186,7 @@ class StoreReceiveEntryController extends Controller
     {
         if($request->raw_material_id)
         {
-            $purchase_order = PurchaseOrder::where('raw_material_id',$request->raw_material_id)->get();
+            $purchase_order = PurchaseOrderItem::with('purchase_order','raw_material')->where('raw_material_id',$request->raw_material_id)->GroupBy('purchase_order_id')->get();
             return json_encode($purchase_order);
         }
     }
@@ -207,6 +206,12 @@ class StoreReceiveEntryController extends Controller
     public function approval(Request $request)
     {
 
+    }
+    public function getChildPartNumber(Request $request)
+    {
+        $type = Type::find($request->type_id);
+        $raw_material_id = RawMaterial::find($request->raw_material_id);
+        $child_part_numbers = ChildPartNumber::find($request->type_id);
     }
     
 }

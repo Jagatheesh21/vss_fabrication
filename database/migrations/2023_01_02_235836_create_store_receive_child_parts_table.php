@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('child_part_unit_boms', function (Blueprint $table) {
+        Schema::create('store_receive_child_parts', function (Blueprint $table) {
             $table->id();
-            $table->integer('type_id');
-            $table->integer('assemble_part_number_id');
-            $table->integer('uom_id');
-            $table->decimal('bom',16,2);
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('child_part_unit_boms');
+        Schema::dropIfExists('store_receive_child_parts');
     }
 };
