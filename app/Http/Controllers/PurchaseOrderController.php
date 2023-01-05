@@ -120,10 +120,10 @@ class PurchaseOrderController extends Controller
         if($id)
         {
             $purchase_order = PurchaseOrder::with('purchase_order_items')->find($id);
-            $view = view('purchase_order.print',compact('purchase_order'))->render();
+            return $view = view('purchase_order.print',compact('purchase_order'))->render();
             //view()->share('purchase_order.print',compact('purchase_order'));
-            $pdf = PDF::loadView($view);
-            return $pdf->download($view);
+            // $pdf = PDF::loadView($view);
+            // return $pdf->download($view);
         }
     }
 }

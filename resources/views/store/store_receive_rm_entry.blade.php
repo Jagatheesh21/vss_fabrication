@@ -102,15 +102,42 @@
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-6 col-form-label required">Available Quantity*</label>
+                      <label for="name" class="col-sm-6 col-form-label required">Available Weight*</label>
                       <div class="form-group">
+                        
                       <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control">
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-4 col-form-label required">Quantity*</label>
+                      <label for="name" class="col-sm-6 col-form-label required">Available Material*</label>
                       <div class="form-group">
-                      <input type="text" name="inward_quantity" id="inward_quantity" value="{{old('quantity')}}" class="form-control">
+                      <input type="text" name="available_material_quantity" id="available_material_quantity" readonly class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <label for="name" class="col-sm-4 col-form-label required">Issue Material Quantity*</label>
+                      <div class="form-group">
+                      <input type="text" name="inward_quantity" id="inward_quantity" value="{{old('inward_material_quantity')}}" class="form-control">
+                      @error('inward_quantity')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                      <label for="name" class="col-sm-4 col-form-label required">Unit Quantity*</label>
+                      <div class="form-group">
+                      <input type="text" name="unit_material_quantity" id="unit_material_quantity" value="{{old('unit_material_quantity')}}" class="form-control">
+                      @error('unit_material_quantity')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <label for="name" class="col-sm-4 col-form-label required">Issue Quantity*</label>
+                      <div class="form-group">
+                      <input type="text" name="inward_quantity" id="inward_quantity" value="{{old('inward_quanity')}}" class="form-control">
                       @error('inward_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -175,7 +202,7 @@
           var data = JSON.parse(response);
         $("#purchase_order_id").append("<option value=''>Select Purchase Order</option>");
         $.each(data, function (i, item) {
-          $("#purchase_order_id").append("<option value='"+item.purchase_order_id+"'>" + item.purchase_order.purchase_order_number + "</option>");
+          $("#purchase_order_id").append("<option value='"+item.id+"'>" + item.rm_po_number + "</option>");
         });
         $("#purchase_order_id").select2({
         allowedClear:true,
@@ -274,7 +301,7 @@ $("#purchase_order_id").change(function(e){
       type:"POST",
       success:function(response)
       {
-        $("#supplier_id").html('<option value='+response.supplier.id+'>'+response.supplier.name+'</option>');
+        $("#supplier_id").html('<option value='+response.test.supplier.id+'>'+response.test.supplier.code+'</option>');
         $("#raw_material_id").html('<option value='+response.test.raw_material.id+'>'+response.test.raw_material.name+'-'+response.test.raw_material.part_description+'</option>');
         $("#type_id").html('<option value='+response.type.id+'>'+response.type.name+'</option>');
         $("#uom_id").html('<option value='+response.test.uom.id+'>'+response.test.uom.name+'</option>');

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->integer('route_card_type_id');
             $table->string('route_card_number');
+            $table->integer('from_operation_id');
+            $table->integer('to_operation_id');
             $table->string('prev_route_card_type_id')->nullable();
             $table->string('prev_route_card_number')->nullable();
             $table->integer('raw_material_id')->nullable();

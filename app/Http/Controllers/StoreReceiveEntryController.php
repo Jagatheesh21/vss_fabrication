@@ -9,6 +9,7 @@ use App\Models\ChildPartNumber;
 use App\Models\RawMaterial;
 use App\Models\Nesting;
 use App\Models\PurchaseOrder;
+use App\Models\PoMaster;
 use App\Models\PurchaseOrderItem;
 use App\Models\Supplier;
 use App\Models\Uom;
@@ -153,7 +154,7 @@ class StoreReceiveEntryController extends Controller
     public function getSupplier(Request $request)
     {
         $purchase_order_id = $request->input('purchase_order_id');
-        $purchase_order = PurchaseOrder::find($purchase_order_id);
+        $purchase_order = PoMaster::find($purchase_order_id);
         $supplier = Supplier::find($purchase_order->supplier_id);
         $html = view('store.supplier_details',compact('supplier'))->render();
         return response(['html' => $html]);
@@ -162,14 +163,15 @@ class StoreReceiveEntryController extends Controller
     public function getPurchaseOrder(Request $request)
     {
         $purchase_order_id = $request->input('purchase_order_id');
-        $purchase_order = PurchaseOrder::find($purchase_order_id);
+        $purchase_order = PoMaster::find($purchase_order_id);
         $supplier = Supplier::find($purchase_order->supplier_id);
-        $test = PurchaseOrderItem::with(['uom','raw_material'])
-        ->where('purchase_order_id',$request->input('purchase_order_id'))
-        ->first();
+        $test = PoMaster::with(['uom','raw_material','material_uom','supplier'])->find($request->input('purchase_order_id'));
         $type = Type::find($test->raw_material->type_id);
-        StoreStock::where('purchase_order_id');
-        return response(['test' => $test,'type' => $type,'supplier'=>$supplier]);
+        $store_stock = StoreStock::where('purchase_order_id',$request->input('purchase_order_id'))->sum('issued_quantity');
+        $store_material_stock = StoreStock::where('purchase_order_id',$request->input('purchase_order_id'))->sum('issued_material_quantity');
+        $available_quantity = ($purchase_order->po_quantity)-$store_stock;
+        $available_material = ($purchase_order->material_quantity)-$store_material_stock;
+        return response(['test' => $test,'type' => $type,'supplier'=>$supplier,'available_quantity'=>available_quantity,'available_material'=>$available_material]);
         // $html = view('store.supplier_details',compact('supplier'))->render();
         // return response(['html' => $html]);
     }
@@ -186,7 +188,8 @@ class StoreReceiveEntryController extends Controller
     {
         if($request->raw_material_id)
         {
-            $purchase_order = PurchaseOrderItem::with('purchase_order','raw_material')->where('raw_material_id',$request->raw_material_id)->GroupBy('purchase_order_id')->get();
+            //$purchase_order = PurchaseOrderItem::with('purchase_order','raw_material')->where('raw_material_id',$request->raw_material_id)->GroupBy('purchase_order_id')->get();
+            $purchase_order = PoMaster::with('raw_material')->where('raw_material_id',$request->raw_material_id)->get();
             return json_encode($purchase_order);
         }
     }

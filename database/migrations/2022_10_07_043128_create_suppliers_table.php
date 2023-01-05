@@ -15,15 +15,14 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('code');
             $table->text('company_name');
-            $table->text('contact_person');
             $table->string('gst_number');
-            $table->string('vendor_code')->nullable();
-            $table->string('hsn_code')->nullable();
             $table->text('address');
-            $table->string('mobile_number');
-            $table->string('contact_number');
+            $table->string('pin_code');
+            $table->string('state');
+            $table->integer('state_code');
+            $table->string('contact_person')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();
         });

@@ -30,9 +30,9 @@
                   @method('POST')
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label for="name" class="col-sm-2 col-form-label required">Name*</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"  autocomplete="off" value="{{ old('name') }}">
-                        @error('name')
+                        <label for="name" class="col-sm-2 col-form-label required">Code*</label>
+                        <input type="text" class="form-control @error('code') is-invalid @enderror" id="code" name="code"  autocomplete="off" value="{{ old('name') }}">
+                        @error('code')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                       </div>
@@ -51,40 +51,35 @@
                         @enderror
                       </div>
                       <div class="col-md-6">
-                        <label for="name" class="col-sm-4 col-form-label required">Mobile Number*</label>
-                        <input type="text" class="form-control @error('mobile_number') is-invalid @enderror" minlength="10" maxlength="10"  id="mobile_number" name="mobile_number"  autocomplete="off" value="{{ old('mobile_number') }}">
-                        @error('mobile_number')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
-                      </div>
-                      <div class="col-md-6">
-                        <label for="name" class="col-sm-4 col-form-label required">Contact Number*</label>
-                        <input type="text" class="form-control @error('contact_number') is-invalid @enderror" minlength="10" maxlength="15" id="contact_number" name="contact_number"  autocomplete="off" value="{{ old('contact_number') }}">
-                        @error('contact_number')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
-                      </div>
-                      <div class="col-md-6">
-                        <label for="name" class="col-sm-4 col-form-label required">HSN Code*</label>
-                        <input type="text" class="form-control @error('hsn_code') is-invalid @enderror" id="hsn_code" name="hsn_code"  autocomplete="off" value="{{ old('hsn_code') }}">
-                        @error('hsn_code')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
-                      </div>
-                      <div class="col-md-6">
-                        <label for="name" class="col-sm-4 col-form-label required">Contact Person*</label>
-                        <input type="text" class="form-control @error('contact_person') is-invalid @enderror" id="contact_person" name="contact_person"  autocomplete="off" value="{{ old('contact_person') }}">
+                        <label for="name" class="col-sm-12 col-form-label required">Contact Person*</label>
+                        <input type="text" class="form-control @error('contact_person') is-invalid @enderror" minlength="5" maxlength="15" id="contact_person" name="contact_person"  autocomplete="off" value="{{ old('contact_person') }}">
                         @error('contact_person')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                       </div>
-                      <div class="col-md-6"> 
-                        <label for="vendor_code" class="col-sm-4 col-form-label required">Vendor Code</label>
-                        <input type="text" class="form-control @error('vendor_code') is-invalid @enderror" id="vendor_code" name="vendor_code"  autocomplete="off" value="{{ old('vendor_code') }}">
-                        @error('vendor_code')
+                      
+                      <div class="col-md-6">
+                        <label for="name" class="col-sm-4 col-form-label required">PIN Code*</label>
+                        <input type="text" class="form-control @error('pin_code') is-invalid @enderror" minlength="6"  id="pin_code" name="pin_code"  autocomplete="off" value="{{ old('pin_code') }}">
+                        @error('pin_code')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                       </div>
+                      <div class="col-md-6">
+                        <label for="name" class="col-sm-4 col-form-label required">State*</label>
+                        <input type="text" class="form-control @error('state') is-invalid @enderror" id="state" name="state"  autocomplete="off" value="{{ old('state') }}">
+                        @error('state')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                      <div class="col-md-6">
+                        <label for="name" class="col-sm-4 col-form-label required">State Code*</label>
+                        <input type="text" class="form-control @error('state_code') is-invalid @enderror"  minlength="2" id="state_code" name="state_code"  autocomplete="off" value="{{ old('state_code') }}">
+                        @error('state_code')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                      
                       <div class="col-md-12">
                         <label for="name" class="col-sm-2 col-form-label required">Address*</label>
                         <textarea name="address" id="address" cols="20" rows="5" class="form-control @error('address') is-invalid @enderror"></textarea>

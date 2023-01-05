@@ -47,7 +47,8 @@ class PartMasterController extends Controller
         $categories = Category::all();
         $types = Type::where('category_id',2)->get();
         $child_parts = ChildPartNumber::all();
-        return view('part_master.create',compact('categories','child_parts','types'));
+        $uoms = Uom::all();
+        return view('part_master.create',compact('categories','child_parts','types','uoms'));
     }
 
     /**

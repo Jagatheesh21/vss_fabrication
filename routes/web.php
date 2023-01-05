@@ -23,6 +23,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\GoodReceivedNoteController;
 use App\Http\Controllers\PartMatrixController;
+use App\Http\Controllers\PoMasterController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -89,5 +90,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/avaialable_quantity', [GeneralController::class,'getAvailableQuantity'])->name('general.avaialable_quantity');
     Route::resource('part_matrix', PartMatrixController::class);
     Route::resource('store_receive_child_part', StoreReceiveChildPartController::class);
+    Route::resource('po_master', PoMasterController::class);
     
 });

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             TypeSeeder::class,
+            RawMaterialSeeder::class,
             OperationTypeSeeder::class,
             OperationSeeder::class,
             UomSeeder::class,

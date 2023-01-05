@@ -19,6 +19,7 @@ class RouteCardTypeSeeder extends Seeder
             RouteCardType::create(['name' => 'A']);
             RouteCardType::create(['name' => 'B']);
             RouteCardType::create(['name' => 'C']);
+            RouteCardType::create(['name' => 'DC']);
             RouteCardType::create(['name' => 'E']);
             RouteCardType::create(['name' => 'F']);
             RouteCardType::create(['name' => 'G']);

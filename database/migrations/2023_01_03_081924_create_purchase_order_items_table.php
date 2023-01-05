@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('uom_id');
             $table->decimal('quantity',16,3);
             $table->decimal('unit_price',16,2);
-            $table->integer('total_price,16,2');
+            $table->decimal('total_price',16,2);
             $table->timestamps();
         });
     }
