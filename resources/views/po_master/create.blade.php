@@ -128,7 +128,7 @@
                       </div>
                     </div>
                    <input type="hidden" name="remarks" value="PO">
-                    <button type="submit" id="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to Save?')">Save</button>
                   </form>
             </div>
         </div>

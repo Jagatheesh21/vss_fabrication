@@ -15,7 +15,7 @@ class AssemblePartNumberController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**

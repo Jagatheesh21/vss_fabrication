@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChildPartNumber;
+use App\Models\PartType;
 use App\Http\Requests\StoreChildPartNumberRequest;
 use App\Http\Requests\UpdateChildPartNumberRequest;
 use DataTables;
@@ -21,7 +22,7 @@ class ChildPartNumberController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = ChildPartNumber::latest()->get();
+            $data = ChildPartNumber::with('part_type')->latest()->get();
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
@@ -80,7 +81,8 @@ class ChildPartNumberController extends Controller
      */
     public function edit(ChildPartNumber $childPartNumber)
     {
-        return view('child_part_number.edit',compact('childPartNumber'));
+        $part_types = PartType::all();
+        return view('child_part_number.edit',compact('childPartNumber','part_types'));
     }
 
     /**

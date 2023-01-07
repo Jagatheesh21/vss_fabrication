@@ -8,7 +8,7 @@
 <div class="card">
     <div class="card-header">
          <strong>Child Part Numbers</strong>
-         <a href="{{route('child_part_number.export')}}" class="bt btn-primary btn-sm">Export</a>
+         <a href="{{route('child_part_number.export')}}" class="btn btn-primary btn-sm">Export</a>
          <a href="{{route('child_part_number.create')}}" class="btn btn-primary btn-sm float-end">Add New</a>
     </div>
     <div class="card-body">
@@ -17,8 +17,8 @@
                 <thead class="bg-secondary">
                     <tr>
                         <th>SNo</th>
+                        <th>Part Type</th>
                         <th>Part Number</th>
-                        <th>Part Model</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -44,8 +44,8 @@
         ajax: "{{ route('child_part_number.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'part_type.name', name: 'part_type'},
             {data: 'name', name: 'name'},
-            {data: 'description', name: 'description'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

@@ -37,7 +37,7 @@ class HomeController extends Controller
         $raw_materials = RawMaterial::count();
         $nestings = Nesting::count();
         $operations = Operation::count();
-        $raw_material_list = RawMaterial::with('stock')->get();
+        $raw_material_list = RawMaterial::with(['stock'])->get();
         $nestings = NestingSequence::get();
         return view('home',compact('nestings','raw_material_list','users','child_part_numbers','raw_materials','nestings','operations','user_lists'));
     }

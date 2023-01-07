@@ -68,7 +68,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card mb-4">
-          <div class="card-header">Stock Report</div>
+          <div class="card-header">Stock Report As On {{ date('d-m-Y') }}</div>
           <div class="card-body">
             <div class="row">
               <div class="table-responsive table-hovered table-striped">
@@ -87,7 +87,7 @@
                             <td>{{$loop->iteration}}</td>
                             <td>{{$material->type->name}}</td>
                             <td>{{$material->name}}-{{$material->part_description}}</td>
-                            <td>{{$material->stock}}</td>
+                            <td>{{$material->stock()->inward_quantity??0.00}}</td>
                           </tr>
                       @endforeach
                     </tbody>

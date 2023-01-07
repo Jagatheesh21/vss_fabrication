@@ -13,6 +13,7 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePoMasterRequest;
 use App\Http\Requests\UpdatePoMasterRequest;
+use DataTables; 
 
 class PoMasterController extends Controller
 {
@@ -21,9 +22,23 @@ class PoMasterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+            $data = PoMaster::with('raw_material','supplier','uom')->latest()->get();
+            
+                return Datatables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('action', function($row){
+       
+                               $btn = '<a href="'.route('po_master.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+               
+                                return $btn;
+                        })
+                        ->rawColumns(['action'])
+                        ->make(true);
+                    }
+                return view('po_master.index');
     }
 
     /**
@@ -86,7 +101,12 @@ class PoMasterController extends Controller
      */
     public function edit(PoMaster $poMaster)
     {
-        //
+        $po_master = $poMaster;
+        $suppliers = Supplier::all();
+        $types = Type::where('category_id',1)->get();
+        $raw_materials = RawMaterial::where('category_id',1)->get();
+        $uoms = Uom::all();
+        return view('po_master.edit',compact('po_master','suppliers','types','raw_materials','uoms'));
     }
 
     /**
@@ -98,7 +118,13 @@ class PoMasterController extends Controller
      */
     public function update(UpdatePoMasterRequest $request, PoMaster $poMaster)
     {
-        //
+        try {
+            $poMaster->update($request->validated());
+            return redirect(route('po_master.index'))->withSuccess("Po Master Updated Successfully!");
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect(route('po_master.index'))->withError($th->getessage());
+        }
     }
 
     /**

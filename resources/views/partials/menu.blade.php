@@ -53,7 +53,7 @@
         ')}}"></use>
       </svg> Quality </a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link" href="{{route('good_received_note.index')}}"><span class="nav-icon"></span> GRN Generation </a></li>      
+        <li class="nav-item"><a class="nav-link" href="{{route('good_received_note.index')}}"><span class="nav-icon"></span> GRN Approval </a></li>      
       </ul>
     </li>
 

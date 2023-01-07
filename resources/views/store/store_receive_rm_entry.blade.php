@@ -104,22 +104,27 @@
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-6 col-form-label required">Available Weight*</label>
                       <div class="form-group">
-                        
                       <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control">
-                      </div>
+                      @error('available_quantity')
+                      <span class="text-danger">{{$message}}</span>
+                      @enderror  
+                    </div>
                     </div>
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-6 col-form-label required">Available Material*</label>
                       <div class="form-group">
                       <input type="text" name="available_material_quantity" id="available_material_quantity" readonly class="form-control">
-                      </div>
+                      @error('available_material_quantity')
+                      <span class="text-danger">{{$message}}</span>
+                      @enderror   
+                    </div>
                     </div>
 
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-4 col-form-label required">Issue Material Quantity*</label>
+                      <label for="name" class="col-sm-12 col-form-label required">Issue Material Quantity*</label>
                       <div class="form-group">
-                      <input type="text" name="inward_quantity" id="inward_quantity" value="{{old('inward_material_quantity')}}" class="form-control">
-                      @error('inward_quantity')
+                      <input type="text" name="inward_material_quantity" id="inward_material_quantity" value="{{old('inward_material_quantity')}}" class="form-control" onkeypress="return onlyNumberKey(event)">
+                      @error('inward_material_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                       </div>
@@ -128,7 +133,7 @@
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-4 col-form-label required">Unit Quantity*</label>
                       <div class="form-group">
-                      <input type="text" name="unit_material_quantity" id="unit_material_quantity" value="{{old('unit_material_quantity')}}" class="form-control">
+                      <input type="text" name="unit_material_quantity" id="unit_material_quantity" value="{{old('unit_material_quantity')}}" class="form-control" readonly>
                       @error('unit_material_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -137,7 +142,7 @@
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-4 col-form-label required">Issue Quantity*</label>
                       <div class="form-group">
-                      <input type="text" name="inward_quantity" id="inward_quantity" value="{{old('inward_quanity')}}" class="form-control">
+                      <input type="text" name="inward_quantity" id="inward_quantity" value="{{old('inward_quanity')}}" class="form-control" readonly>
                       @error('inward_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -146,7 +151,7 @@
                   </div>  
                     <div class="row mb-0">
                         <div class="col-md-8 offset-md-4">
-                           <button type="submit" id="submit" class="btn btn-primary">Save</button>
+                           <button type="button" id="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                   </form>
@@ -157,9 +162,32 @@
 @endsection
 @push('scripts')
 <script src="{{asset('js/select2.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
+$("document").ready(function(){
+  $.toast('Here you can put the text of the toast')
+});
   $("#type_id").select2();
 
+  $("#submit").click(function(){
+    
+    $.ajax({
+      url:"{{ route('store_receive.store') }}",
+      type:"POST",
+      data:$("#operation_save").serialize(),
+      success:function(response)
+      {
+
+      },
+      error:function(response)
+      {
+      $.each(response.responseJSON.errors,function(field_name,error){
+        $(document).find('[name='+field_name+']').after('');
+        $(document).find('[name='+field_name+']').after('<span class="text-strong text-danger">' +error+ '</span>')
+      });
+      }
+    });
+  });
   $("#type_id").change(function(e){
     e.preventDefault();
     if($(this).val()=='' || $(this).val()==undefined || $(this).val()==null)
@@ -305,7 +333,10 @@ $("#purchase_order_id").change(function(e){
         $("#raw_material_id").html('<option value='+response.test.raw_material.id+'>'+response.test.raw_material.name+'-'+response.test.raw_material.part_description+'</option>');
         $("#type_id").html('<option value='+response.type.id+'>'+response.type.name+'</option>');
         $("#uom_id").html('<option value='+response.test.uom.id+'>'+response.test.uom.name+'</option>');
-        $("#available_quantity").val(response.test.quantity);
+        $("#available_quantity").val(response.available_quantity);
+        $("#available_material_quantity").val(response.available_material);
+        $("#unit_material_quantity").val(response.unit_material_quantity);
+        $("#invoice_number").val(response.test.invoice_number);
       }
     });
   }
@@ -328,5 +359,29 @@ if(inward>avaialable)
   return false;
 }
 });
+$("#inward_material_quantity").change(function(e){
+var inward_material_quantity = $(this).val();
+if(inward_material_quantity=='' || inward_material_quantity==null || inward_material_quantity==undefined || inward_material_quantity==0){
+return false;
+}
+var bom = $("#unit_material_quantity").val();
+var inward_total = parseFloat(bom*inward_material_quantity).toFixed(3);
+$("#inward_quantity").val(inward_total);
+});
+
+function onlyNumberKey(evt) {
+  if (event.shiftKey == true) {
+        event.preventDefault();
+    }
+    // Allow Only: keyboard 0-9, numpad 0-9, backspace, tab, left arrow, right arrow, delete
+    if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46) {
+        // Allow normal operation
+    } else {
+        // Prevent the rest
+        event.preventDefault();
+    }
+          }
+
+
 </script>
 @endpush

@@ -13,7 +13,7 @@ class UpdatePoMasterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ class UpdatePoMasterRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'rm_po_number' => 'required',
+            'supplier_id' => 'required',
+            'raw_material_id' => 'required',
+            'type_id' => 'required',
+            'po_date' => 'required',
+            'po_quantity' => 'required',
+            'uom_id' => 'required',
+            'material_quantity' => 'required',
+            'material_uom_id' => 'required',
+            'unit_material_quantity' => 'required',
+            'invoice_number' => 'required',
+            'remarks' => 'max:255',
         ];
     }
 }

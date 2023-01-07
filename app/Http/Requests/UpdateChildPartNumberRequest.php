@@ -25,7 +25,7 @@ class UpdateChildPartNumberRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'description' => 'required'
+            'part_type_id' => 'required'
         ];
     }
 }

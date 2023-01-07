@@ -16,10 +16,9 @@
                 <thead class="bg-secondary">
                     <tr>
                         <th>SNo</th>
-                        <th>Name</th>
+                        <th>Supplier Code</th>
                         <th>Company Name</th>
                         <th>GST Number</th>
-                        <th>Mobile Number</th>
                         <th>Address</th>
                         <th>Action</th>
                     </tr>
@@ -46,10 +45,9 @@
         ajax: "{{ route('supplier.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
+            {data: 'code', name: 'name'},
             {data: 'company_name', name: 'company_name'},
             {data: 'gst_number', name: 'gst_number'},
-            {data: 'mobile_number', name: 'mobile_number'},
             {data: 'address', name: 'address'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]

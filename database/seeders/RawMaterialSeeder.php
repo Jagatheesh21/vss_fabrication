@@ -18,5 +18,7 @@ class RawMaterialSeeder extends Seeder
         RawMaterial::Create(['category_id'=>1,'type_id'=>1,'name'=>'11.6MM','part_description'=>'11.6x1500x6300']);
         RawMaterial::Create(['category_id'=>1,'type_id'=>1,'name'=>'10.0MM','part_description'=>'10.0x1500x1500']);
         RawMaterial::Create(['category_id'=>1,'type_id'=>1,'name'=>'8.0MM','part_description'=>'8.0x1500x750']);
+        RawMaterial::Create(['category_id'=>1,'type_id'=>2,'name'=>'DIA 50','part_description'=>'DIA 50']);
+        RawMaterial::Create(['category_id'=>1,'type_id'=>2,'name'=>'DIA 60','part_description'=>'DIA 60']);
     }
 }

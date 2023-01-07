@@ -171,7 +171,8 @@ class StoreReceiveEntryController extends Controller
         $store_material_stock = StoreStock::where('purchase_order_id',$request->input('purchase_order_id'))->sum('issued_material_quantity');
         $available_quantity = ($purchase_order->po_quantity)-$store_stock;
         $available_material = ($purchase_order->material_quantity)-$store_material_stock;
-        return response(['test' => $test,'type' => $type,'supplier'=>$supplier,'available_quantity'=>available_quantity,'available_material'=>$available_material]);
+        $unit_material_quantity = $purchase_order->unit_material_quantity;
+        return response(['test' => $test,'type' => $type,'supplier'=>$supplier,'available_quantity'=>$available_quantity,'available_material'=>$available_material,'unit_material_quantity'=>$unit_material_quantity]);
         // $html = view('store.supplier_details',compact('supplier'))->render();
         // return response(['html' => $html]);
     }

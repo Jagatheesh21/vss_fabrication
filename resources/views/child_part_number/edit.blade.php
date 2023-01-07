@@ -27,24 +27,29 @@
                   @csrf
                   @method('PUT')
                     <div class="row mb-3">
-                      <label for="name" class="col-sm-2 col-form-label required">Name</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name" name="name" autocomplete="off" value="{{$childPartNumber->name}}">
-                        @error('name')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
+                      <div class="col-md-4">
+                        <label for="name" class="col-sm-12 col-form-label required">Part Type*</label>
+                        <div class="form-group">
+                          <select name="part_type_id" id="part_type_id" class="form-control select2">
+                            <option value="">Select Part Type</option>
+                            @foreach ($part_types as $part_type)
+                                <option value="{{ $part_type->id }}" @if ($part_type->id==$childPartNumber->part_type_id)
+                                    selected
+                                @endif>{{ $part_type->name }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="name" class="col-sm-12 col-form-label required">Name*</label>
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="name" name="name" autocomplete="off" value="{{$childPartNumber->name}}">
+                          @error('name')
+                          <span class="text-danger">{{$message}}</span>
+                          @enderror
+                        </div>
                       </div>
                     </div>
-                    <div class="row mb-3">
-                      <label for="descrption" class="col-sm-2 col-form-label">Description</label>
-                      <div class="col-sm-10">
-                        <textarea name="description" id="description" class="form-control" rows="10">{!!$childPartNumber->description!!}</textarea>
-                        @error('description')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
-                      </div>
-                    </div>
-
                     <button type="submit" id="submit" class="btn btn-primary">Update</button>
                   </form>
             </div>
@@ -53,7 +58,9 @@
 
 @endsection
 @push('scripts')
-<script>
+<script src="{{asset("js/select2.min.js")}}"></script>
 
+<script>
+$("#part_type_id").select2();
 </script>
 @endpush
