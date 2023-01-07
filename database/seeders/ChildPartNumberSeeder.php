@@ -17,14 +17,16 @@ class ChildPartNumberSeeder extends Seeder
     {
         ChildPartNumber::truncate();
   
-        $csvFile = fopen(base_path("database/data/country.csv"), "r");
+        $csvFile = fopen(base_path("database/mysql/child_part_numbers.csv"), "r");
   
         $firstline = true;
         while (($data = fgetcsv($csvFile, 2000, ",")) !== FALSE) {
             if (!$firstline) {
-                Country::create([
-                    "name" => $data['0'],
-                    "code" => $data['1']
+                ChildPartNumber::create([
+                    "part_type_id" => $data['1'],
+                    "name" => $data['2'],
+                    "revision_number" => $data['5'],
+                    "status" => 1
                 ]);    
             }
             $firstline = false;
