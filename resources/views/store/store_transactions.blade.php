@@ -6,7 +6,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-                 <strong>GRN Pending List</strong>
+                 <strong>Store Transactions</strong><a href="{{route('raw_material.create')}}" class="btn btn-primary float-end">Add New</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">

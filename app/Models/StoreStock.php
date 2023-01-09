@@ -46,7 +46,7 @@ public static function getNextGrnNumber()
  *
  * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
  */
-public function raw_material(): BelongsTo
+public function raw_material()
 {
     return $this->belongsTo(RawMaterial::class, 'raw_material_id');
 }
@@ -57,6 +57,14 @@ public function category()
 public function type()
 {
     return $this->belongsTo(Type::class, 'type_id');
+}
+public function uom()
+{
+    return $this->belongsTo(Uom::class, 'uom_id');
+}
+public function material_uom()
+{
+    return $this->belongsTo(Uom::class, 'material_uom_id');
 }
 
 }

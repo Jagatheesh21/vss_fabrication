@@ -18,6 +18,7 @@ use App\Models\StoreStock;
 use App\Http\Requests\StoreStockRMEntryRequest;
 use DB;
 use Carbon\Carbon;
+use DataTables;
 class StoreReceiveEntryController extends Controller
 {
     /**
@@ -25,9 +26,32 @@ class StoreReceiveEntryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+            $data = StoreStock::with(['raw_material','uom','material_uom'])->latest()->get();
+                return Datatables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('status', function($data){
+                            if(($data->approved_status)==1){
+                                return '<button class="btn btn-sm btn-success text-white">Approved</button>';
+                             }else{
+                                return '<button class="btn btn-sm btn-danger text-white">Pending</button>';
+                            }
+                             })
+                        
+                        ->addColumn('action', function($row){  
+                            $btn='';     
+                            if(auth()->user()->id==4){
+                               $btn = '<a href="'.route('store_receive.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMaterialType">Edit</a>';        
+                            }
+                               return $btn;
+                        })
+                        
+                        ->rawColumns(['action','status'])
+                        ->make(true);
+                    }
+                    return view('store.store_transactions');
     }
 
     /**

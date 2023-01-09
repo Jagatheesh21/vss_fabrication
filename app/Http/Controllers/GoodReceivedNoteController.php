@@ -21,22 +21,24 @@ class GoodReceivedNoteController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = GoodReceivedNote::with(['purchase_order','uom','user'])->latest()->get();
-      
+            $data = StoreStock::with(['raw_material','uom','material_uom'])->latest()->get();
                 return Datatables::of($data)
                         ->addIndexColumn()
-                        ->addColumn('action', function($row){
-       
-                               $btn = '<a href="'.route('good_received_note.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
-       
-                               //$btn = $btn.' <a href="'.route('operation.destroy',$row->id).'"  data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
-        
+                        ->addColumn('status', function($data){
+                            if(($data->approved_status)==1){
+                                return '<button class="btn btn-sm btn-success text-white">Approved</button>';
+                             }else{
+                                return '<button class="btn btn-sm btn-danger text-white">Pending</button>';
+                            }
+                             })
+                        ->addColumn('action', function($row){       
+                               $btn = '<a href="'.route('store_receive.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMaterialType">Edit</a>';        
                                 return $btn;
                         })
-                        ->rawColumns(['action'])
+                        ->rawColumns(['action','status'])
                         ->make(true);
                     }
-                    return view('good_received_note.index');
+                    return view('store.store_transactions');
     }
 
     /**

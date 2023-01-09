@@ -40,8 +40,8 @@
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-library-building')}}"></use>
       </svg> Stores</a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link" href="{{route("po_master.create")}}"><span class="nav-icon"></span> RM Po Master </a></li>      
-        <li class="nav-item"><a class="nav-link" href="{{route("store_receive.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>      
+        <li class="nav-item"><a class="nav-link" href="{{route("po_master.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>      
+        {{-- <li class="nav-item"><a class="nav-link" href="{{route("store_receive.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>       --}}
         <li class="nav-item"><a class="nav-link" href="{{route("store_issue.create")}}"><span class="nav-icon"></span> Store Issue RM </a></li>      
         {{-- <li class="nav-item"><a class="nav-link" href="{{route("store_issue.dc_issuance")}}"><span class="nav-icon"></span> DC Issuance </a></li>       --}}
         <li class="nav-item"><a class="nav-link" href="{{route('store_receive_child_part.create')}}"><span class="nav-icon"></span> Store Receive Child Part </a></li>      
@@ -67,7 +67,7 @@
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-storage')}}"></use>
       </svg> Reports </a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Transactions </a></li>      
+        <li class="nav-item"><a class="nav-link" href="{{ route('store_receive.index') }}"><span class="nav-icon"></span> Store Transactions </a></li>      
         <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Stock </a></li>      
         <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Open Route Card Report </a></li>      
         <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Closed Route Card Report </a></li>      

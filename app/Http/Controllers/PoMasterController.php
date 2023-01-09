@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PoMaster;
+use App\Models\StoreStock;
 use App\Models\Supplier;
 use App\Models\Type;
 use App\Models\RawMaterial;
@@ -72,11 +73,15 @@ class PoMasterController extends Controller
      */
     public function store(StorePoMasterRequest $request)
     {
+       DB::beginTransaction();
         try {
             PoMaster::create($request->validated());
-            return back()->withSuccess('PO Master Added Successfully!');
+            DB::commit();
+            return redirect(route('store_receive.index'))->withSuccess('PO Master Added Successfully!');
+           // 
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollback();
             return back()->withError($th->getMessage());
 
         }
