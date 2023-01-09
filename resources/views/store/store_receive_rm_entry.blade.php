@@ -182,8 +182,9 @@ $("document").ready(function(){
       error:function(response)
       {
       $.each(response.responseJSON.errors,function(field_name,error){
-        $(document).find('[name='+field_name+']').after('');
-        $(document).find('[name='+field_name+']').after('<span class="text-strong text-danger">' +error+ '</span>')
+        alert(error);
+        //$(document).find('[name='+field_name+']').after('');
+        //$(document).find('[name='+field_name+']').after('<span class="text-strong text-danger">' +error+ '</span>')
       });
       }
     });

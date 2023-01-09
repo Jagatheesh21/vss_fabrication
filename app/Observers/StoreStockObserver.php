@@ -15,7 +15,7 @@ class StoreStockObserver
      */
     public function created(StoreStock $storeStock)
     {
-    //     $total_inward_quantity = StoreStock::where('purchase_order_id',$storeStock->purchase_order_id)->sum('inward_quantity');
+    $total_inward_quantity = StoreStock::where('purchase_order_id',$storeStock->purchase_order_id);
     //     $purchase =  PurchaseOrder::find($storeStock->purchase_order_id);
     //    if($purchase->useage_quantity==$total_inward_quantity)
     //    {

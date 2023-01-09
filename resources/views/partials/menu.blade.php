@@ -5,7 +5,7 @@
         </svg> Dashboard
         </a>
       </li>
-    @if (auth()->user()->id==1)
+    @if (auth()->user()->id==1 || auth()->user()->id==2)
 
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
@@ -34,6 +34,7 @@
         <li class="nav-item"><a class="nav-link" href="{{route("purchase_order.index")}}"><span class="nav-icon"></span> Purchase Orders </a></li>      
       </ul>
     </li> --}}
+    @if(auth()->user()->id==3 || auth()->user()->id==1)
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-library-building')}}"></use>
@@ -47,6 +48,8 @@
         <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Issue Child Part </a></li>       
       </ul>
     </li>
+    @endif
+    @if(auth()->user()->id==4 || auth()->user()->id==1)
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass
@@ -56,8 +59,9 @@
         <li class="nav-item"><a class="nav-link" href="{{route('good_received_note.index')}}"><span class="nav-icon"></span> GRN Approval </a></li>      
       </ul>
     </li>
-
+    @endif
     {{-- REPORTS --}}
+    @if (auth()->user()->id==2 || auth()->user()->id==1)
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-storage')}}"></use>
@@ -70,11 +74,14 @@
         <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Quantity Accounting Report </a></li>      
       </ul>
     </li>
+    @endif
+    @if(auth()->user()->id==1)
     <li class="nav-item mt-auto"><a class="nav-link nav-link-danger" href="#" target="_top">
       <svg class="nav-icon">
         <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-files"></use>
       </svg> DB Backup
     </a></li>
+    @endif
     <li class="nav-item "><a class="nav-link" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-account-logout')}}"></use>

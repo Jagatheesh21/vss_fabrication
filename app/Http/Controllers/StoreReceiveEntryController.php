@@ -37,6 +37,10 @@ class StoreReceiveEntryController extends Controller
      */
     public function create()
     {
+        // $stock = StoreStock::where('purchase_order_id',1);
+        // $purchase =  PoMaster::find(1);
+        // dd($purchase);
+        // dd($stock->sum('inward_quantity'));
         $grn_number = StoreStock::getNextGrnNumber(); 
         $types = Type::where('category_id',1)->whereStatus(1)->get();
         return view('store.store_receive_rm_entry',compact('grn_number','types'));
@@ -69,9 +73,9 @@ class StoreReceiveEntryController extends Controller
         $store->save();
         DB::commit();
         // Purchase Order 
-        return redirect()->route('store.getConfirm', $store->id);
+        //return redirect()->route('store.getConfirm', $store->id);
        //return response()->json(['success' => 'Store Stock Added Successfully!','status' => 200]);
-       // return back()->withSuccess('Store Stock Added Successfully!');            
+       return back()->withSuccess('Store Stock Added Successfully!');            
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollback();

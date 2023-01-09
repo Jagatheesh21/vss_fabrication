@@ -127,58 +127,61 @@
         </div>
       </div> --}}
     </div>
+    @if (auth()->user()->id==1 || auth()->user()->id==2) 
     <div class="row">
-        <div class="col-md-12">
-          <div class="card mb-4">
-            <div class="card-header">User Activity Log</div>
-            <div class="card-body">
-              <div class="row">
-                <div class="table-responsive">
-                    <table class="table border mb-0">
-                      <thead class="table-light fw-semibold">
-                        <tr class="align-middle">
-                          <th class="text-center">
-                            <svg class="icon">
-                              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-people"></use>
-                            </svg>
-                          </th>
-                          <th>User</th>
-                          <th>Last Activity</th>
-                          <th>Last Login IP </th>
-                          <th>Last Activity At</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @foreach($user_lists as $user_list)
-                        <tr class="align-middle">
-                          <td class="text-center">
-                            <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/default.png" alt="user@email.com"><span class="avatar-status bg-success"></span></div>
-                          </td>
-                          <td>
-                            <div>{{$user_list->name}}</div>
-                            <div class="small text-medium-emphasis"> Registered: {{$user_list->created_at}}</div>
-                          </td>
-                          <td>
-                            <div>Part Number Creation </div>
-                          </td>
-                          <td>
-                            <div> 192.168.1.1 </div>
-                          </td>
-                          
-                          <td>
-                            <div class="fw-semibold">10 sec ago</div>
-                          </td>
-                          
-                        </tr>
-                        @endforeach
-                      </tbody>
-                    </table>
-                  </div>
-              </div>
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-header">User Activity Log</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="table-responsive">
+                  <table class="table border mb-0">
+                    <thead class="table-light fw-semibold">
+                      <tr class="align-middle">
+                        <th class="text-center">
+                          <svg class="icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-people"></use>
+                          </svg>
+                        </th>
+                        <th>User</th>
+                        <th>Last Activity</th>
+                        <th>Last Login IP </th>
+                        <th>Last Activity At</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($user_lists as $user_list)
+                      <tr class="align-middle">
+                        <td class="text-center">
+                          <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/default.png" alt="user@email.com"><span class="avatar-status bg-success"></span></div>
+                        </td>
+                        <td>
+                          <div>{{$user_list->name}}</div>
+                          <div class="small text-medium-emphasis"> Registered: {{$user_list->created_at}}</div>
+                        </td>
+                        <td>
+                          <div>Part Number Creation </div>
+                        </td>
+                        <td>
+                          <div> 192.168.1.1 </div>
+                        </td>
+                        
+                        <td>
+                          <div class="fw-semibold">10 sec ago</div>
+                        </td>
+                        
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
             </div>
-          </div>         
-        </div>
-    </div>
+          </div>
+        </div>         
+      </div>
+  </div>
+   
+    @endif
 
     
   
