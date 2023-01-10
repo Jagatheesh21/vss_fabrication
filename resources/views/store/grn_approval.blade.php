@@ -20,11 +20,11 @@
   
     <div class="card">
         <div class="card-header">
-            <strong>Store - Raw Material Receive - Confirmation </strong>
+            <strong>GRN Approval </strong>
         </div>
         <div class="card-body">
             <div class="col-md-12">
-                <form id="operation_save" method="POST" action="{{route('store_receive.update',$store->id)}}">
+                <form id="operation_save" method="POST" action="{{route('store_receive.update',$store->id)}}" enctype="multipart/form-data">
                   @csrf
                   @method('PUT')
                   <div class="row mb-3">
@@ -42,9 +42,11 @@
                         <select name="type_id" id="type_id" class="form-control select2">
                             <option value="">Select Raw Material Type</option>
                             @foreach ($types as $type)
-                                <option value="{{$type->id}}" @if ($store->type_id==$type->id)
+                            @if ($store->type_id==$type->id)    
+                            <option value="{{$type->id}}" 
                                     selected
-                                @endif>{{$type->name}}</option>
+                               >{{$type->name}}</option>
+                               @endif
                             @endforeach
                         </select>
                         @error('type_id')
@@ -57,7 +59,11 @@
                       <div class="form-group">
                         <select name="raw_material_id" id="raw_material_id" class="form-control select2">
                         @foreach ($raw_materials as $raw_material)
-                            <option value="{{$raw_material->id}}">{{$raw_material->name}}</option>
+                        @if ($store->raw_material_id==$raw_material->id)
+                            <option value="{{$raw_material->id}}" 
+                                selected
+                           >{{$raw_material->name}}</option>
+                           @endif
                         @endforeach
                         </select>
                         @error('raw_material_id')
@@ -65,20 +71,7 @@
                         @enderror
                       </div>
                     </div>
-                    <div class="col-sm-4">
-                      <label for="name" class="col-sm-6 col-form-label required">Purchase Order*</label>
-                      <div class="form-group">
-                        <select name="purchase_order_id" id="purchase_order_id" class="form-control select2">
-                          <option value="">Select Purchase Order</option>
-                          @foreach($purchase_orders as $purchase_order)
-                          <option value="{{$purchase_order->id}}" @if($purchase_order->id==$store->purchase_order_id) selected @endif>{{$purchase_order->purchase_order_number}}</option>
-                          @endforeach
-                        </select>
-                        @error('purchase_order_id')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
-                      </div>
-                    </div>
+                   
                     <div class="col-sm-4 supplier_div">
                       <label for="name" class="col-sm-4 col-form-label required">Supplier*</label>
                       <div class="form-group">
@@ -86,7 +79,7 @@
                           <option value="">Select Supplier</option>
                           @foreach($suppliers as $supplier)
                           @if($supplier->id==$store->supplier_id)
-                          <option value="{{$supplier->id}}" selected>{{$supplier->name}}</option>
+                          <option value="{{$supplier->id}}" selected>{{$supplier->code}}</option>
                           @endif
                           @endforeach
                         </select>
@@ -98,7 +91,7 @@
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-6 col-form-label required">Invoice Number*</label>
                       <div class="form-group">
-                       <input type="text" name="invoice_number" id="invoice_number" class="form-control" value="{{$store->invoice_number}}">
+                       <input type="text" name="invoice_number" id="invoice_number" class="form-control" readonly value="{{$store->invoice_number}}">
                         @error('invoice_number')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -121,25 +114,93 @@
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-6 col-form-label required">Available Quantity*</label>
+                      <label for="name" class="col-sm-6 col-form-label required">Total Quantity*</label>
                       <div class="form-group">
-                      <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control" value="{{$store->purchase_order->total_quantity}}">
+                      <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control" value="{{$store->inward_quantity}}" >
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-4 col-form-label required">Quantity*</label>
+                      <label for="name" class="col-sm-12 col-form-label required">Total Material Quantity*</label>
                       <div class="form-group">
-                      <input type="text" name="inward_quantity" id="inward_quantity"  class="form-control" value="{{$store->inward_quantity}}">
+                      <input type="text" name="inward_material_quantity" id="inward_material_quantity"  class="form-control" value="{{$store->inward_material_quantity}}">
                       @error('inward_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                       </div>
                     </div>
+                    <div class="col-sm-4">
+                      <label for="name" class="col-sm-4 col-form-label required">Material UOM*</label>
+                      <div class="form-group">
+                        <select name="material_uom_id" id="material_uom_id" class="form-control select2">
+                          <option value="">Select Material UOM</option>
+                          @foreach($uoms as $m_uom)
+                          @if($store->material_uom_id==$m_uom->id)
+                          <option value="{{$m_uom->id}}" selected>{{$m_uom->name}}</option>
+                          @endif
+                          @endforeach
+                        </select>
+                        @error('material_uom_id')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="" class="col-sm-12 col-form-label required">Ok Material Quantity *</label>
+                        <input type="text" name="ok_material_quantity" id="ok_material_quantity" class="form-control" value="{{old('ok_material_quantity')}}" required>
+                        @error('ok_material_quantity')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="" class="col-sm-12 col-form-label required">Reject Material Quantity*</label>
+                        <input type="text" name="reject_material_quantity" id="reject_material_quantity" class="form-control" value="{{old('reject_material_quantity')}}" required>
+                        @error('reject_material_quantity')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="" class="col-sm-12 col-form-label required">Inspection Report*</label>
+                        <input type="file" name="inspection_report" id="inspection_report" class="form-control" value="{{ old('inspection_report') }}" required>
+                        @error('inspection_report')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="" class="col-sm-12 col-form-label required">Status*</label>
+                        <select name="approved_status" id="approved_status" class="form-control select2" required>
+                          <option value="">Select Status</option>
+                          <option value="1" @if (old('approved_status')==1)
+                              selected
+                          @endif>Approve</option>
+                          <option value="2" @if (old('approved_status')==2)
+                          selected
+                      @endif>Reject</option>
+                        </select>
+                        @error('approved_status')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="" class="col-sm-12 col-form-label required">Remarks*</label>
+                        <textarea name="remarks" id="remarks" cols="30" rows="3" class="form-control"></textarea>
+                        @error('remarks')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      </div>
+                    </div>
                   </div> 
-                  <input type="hidden" name="confirm" value="1"> 
-                    <div class="row mb-0">
+                  <div class="row mb-0">
                         <div class="col-md-8 offset-md-4">
-                           <button type="submit" id="submit" class="btn btn-primary">Confirm</button>
+                           <button type="submit" id="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                   </form>
@@ -152,6 +213,7 @@
 <script src="{{asset('js/select2.min.js')}}"></script>
 <script>
   $("#type_id").select2();
+  $("#approved_status").select2();
 
   $("#type_id").change(function(e){
     e.preventDefault();

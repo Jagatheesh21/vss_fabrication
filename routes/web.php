@@ -67,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('store_receive/getRawMaterials', [StoreReceiveEntryController::class,'getRawMaterials'])->name('store.materials');
     Route::post('store_receive/getSupplier', [StoreReceiveEntryController::class,'getSupplier'])->name('store.getSupplier');
     Route::post('store_receive/getPurchaseOrder', [StoreReceiveEntryController::class,'getPurchaseOrder'])->name('store.getPurchaseOrder');
+    Route::get('store_receive/download/{id}', [StoreReceiveEntryController::class,'download'])->name('store_receive.download');
     Route::post('store_receive/getChildPartNumber', [StoreReceiveEntryController::class,'getChildPartNumber'])->name('store.getChildPartNumber');
     Route::post('store_receive/getMaterialPurchaseOrder', [StoreReceiveEntryController::class,'getMaterialPurchaseOrder'])->name('store.getMaterialPurchaseOrder');
     Route::resource('store_receive', StoreReceiveEntryController::class);

@@ -106,7 +106,7 @@ class GoodReceivedNoteController extends Controller
      */
     public function edit(GoodReceivedNote $goodReceivedNote)
     {
-        //
+        
     }
 
     /**

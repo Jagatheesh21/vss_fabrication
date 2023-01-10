@@ -16,9 +16,12 @@ use App\Models\Uom;
 use Auth;
 use App\Models\StoreStock;
 use App\Http\Requests\StoreStockRMEntryRequest;
+use App\Http\Requests\UpdateStoreReceiveRequest;
 use DB;
 use Carbon\Carbon;
 use DataTables;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 class StoreReceiveEntryController extends Controller
 {
     /**
@@ -42,9 +45,12 @@ class StoreReceiveEntryController extends Controller
                         
                         ->addColumn('action', function($row){  
                             $btn='';     
-                            if(auth()->user()->id==4){
+                            if(auth()->user()->id==4 && $row->approved_status==0){
                                $btn = '<a href="'.route('store_receive.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editMaterialType">Edit</a>';        
                             }
+                            if(auth()->user()->id==4 && $row->approved_status==1){
+                                $btn = '<a href="'.route('store_receive.download',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Download" class="edit btn btn-primary btn-sm DownloadReport">Download</a>';        
+                             }
                                return $btn;
                         })
                         
@@ -132,8 +138,10 @@ class StoreReceiveEntryController extends Controller
             $types = Type::where('category_id',1)->whereStatus(1)->get();
             $raw_materials = RawMaterial::get();
             $types = Type::where('category_id',1)->whereStatus(1)->get();
+            $suppliers = Supplier::where('status',1)->get();
+            $uoms = Uom::where('status',1)->get();
             DB::commit();
-            return view('store.grn_approval',compact('store','types','raw_materials'));
+            return view('store.grn_approval',compact('store','types','raw_materials','suppliers','uoms'));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollback();
@@ -148,22 +156,31 @@ class StoreReceiveEntryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateStoreReceiveRequest $request, $id)
     {
         try {
+            $filePath = public_path('inspection_report');
+                if (!is_dir($filePath))
+                {
+                mkdir($filePath, 0755, true);
+                } 
             $store = StoreStock::find($id);
-            $store->category_id = $request->category_id;
-            $store->type_id = $request->type_id;
-            $store->raw_material_id = $request->raw_material_id;
-            $store->uom_id = $request->uom_id;
-            $store->inward_quantity = $request->inward_quantity;
-            $store->available_quantity = $request->inward_quantity;
-            $store->confirm = 1;
             $store->approved_by = auth()->user()->id;
             $store->approved_date = Carbon::now();
             $store->approved_status = 1;
+            $store->checked_quantity = $request->ok_material_quantity;
+            $store->rejection_quantity = $request->reject_material_quantity;
+            $store->available_quantity = ($request->ok_material_quantity)-($request->reject_material_quantity);
+            if($file = $request->file('inspection_report')) {
+                $fileName = $file->getClientOriginalName();
+                $fileName = $filePath .'/'. $fileName;
+                $file->move($filePath,$fileName);
+                $store->inspection_report = $fileName;
+            }
+            $store->remarks = $request->remarks??null;
+            
             $store->update();
-            return redirect(route('store_receive.create'))->withSuccess('GRN Confirmed Successfully!');
+            return redirect(route('store_receive.index'))->withSuccess('GRN Approved Successfully!');
         } catch (Exception $e) {
             return back()->withError($e->getMessage());
         }
@@ -245,6 +262,10 @@ class StoreReceiveEntryController extends Controller
         $raw_material_id = RawMaterial::find($request->raw_material_id);
         $child_part_numbers = ChildPartNumber::find($request->type_id);
     }
-    
+    public function download($id)
+    {   
+        $store = StoreStock::find($id);
+        return Response::download($store->inspection_report);
+    }
 }
 
