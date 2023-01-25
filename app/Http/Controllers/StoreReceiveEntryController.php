@@ -158,6 +158,7 @@ class StoreReceiveEntryController extends Controller
      */
     public function update(UpdateStoreReceiveRequest $request, $id)
     {
+        DB::beginTransaction();
         try {
             $filePath = public_path('inspection_report');
                 if (!is_dir($filePath))
@@ -180,8 +181,10 @@ class StoreReceiveEntryController extends Controller
             $store->remarks = $request->remarks??null;
             
             $store->update();
+            DB::commit();
             return redirect(route('store_receive.index'))->withSuccess('GRN Approved Successfully!');
         } catch (Exception $e) {
+            DB::rollback();
             return back()->withError($e->getMessage());
         }
     }

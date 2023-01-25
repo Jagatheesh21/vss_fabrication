@@ -13,6 +13,7 @@ use App\Models\Type;
 use App\Models\RawMaterial;
 use App\Models\Nesting;
 use App\Models\NestingSequence;
+use App\Models\SheetNesting;
 use App\Models\StoreTransaction;
 use App\Models\RouteCardTransaction;
 use App\Models\PurchaseOrder;
@@ -39,13 +40,12 @@ class StoreIssueEntryController extends Controller
     {
         $child_part_numbers = ChildPartNumber::whereStatus(1)->get();
         $raw_materials = RawMaterial::whereStatus(1)->get();
-        $category = Category::find(1);
-        $types = Type::where('category_id',1)->where('status',1)->get();
         $route_card_number = RouteCardTransaction::getNextRouteCardNumber(1);
-        $nestings = Nesting::where('status',1)->get();
+        $nestings = SheetNesting::all();
+        $types = Type::where('category_id',1)->where('id','!=',2)->get();
         $purchase_orders = PurchaseOrder::where('status',1)->get();
 
-        return view('store.store_issue_rm_entry',compact('child_part_numbers','category','types','route_card_number','nestings','purchase_orders'));
+        return view('store.store_issue_rm_entry',compact('child_part_numbers','types','raw_materials','route_card_number','nestings','purchase_orders'));
     }
 
     /**
@@ -57,6 +57,7 @@ class StoreIssueEntryController extends Controller
     public function store(StoreIssueEntryRequest $request)
     {
 
+       dd($request->all());
         try {
             //StoreTransaction::create($request->validated());
             $nesting_types = $request->input('nesting_type_id');
@@ -155,6 +156,19 @@ class StoreIssueEntryController extends Controller
         $bom = ChildPartBom::select('quantity')->where('raw_material_id',$raw_material_id)->where('nesting_id',$nesting_id)->where('nesting_type_id',$nesting_type_id)->where('child_part_number_id',$child_part_number_id)->first();
         return $bom->quantity;
     }
-    
+    public function getSheetNestings(Request $request)
+    {
+        $raw_material_id = $request->raw_material_id;
+        $nestings = SheetNesting::where('raw_material_id',$raw_material_id)->GroupBy('nesting_number')->get();
+        return json_encode($nestings);
+    }
+    public function getSheetNestingLists(Request $request)
+    {
+        $nesting_number = $request->nesting_id;
+        $nestings = SheetNesting::where('nesting_number',$nesting_number)->get();
+        $types = Type::where('category_id',2)->where('status',1)->get();
+        $child_part_numbers = ChildPartNumber::where('status',1)->get();
+        return $html = view("store.sheet_nesting_list",compact('nestings','types','child_part_numbers'))->render();
+    }
 }
 

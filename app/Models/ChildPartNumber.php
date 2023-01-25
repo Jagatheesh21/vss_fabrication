@@ -18,4 +18,8 @@ class ChildPartNumber extends Model
     {
         return $this->belongsTo(PartType::class, 'part_type_id');
     }
+    public function bom()
+    {
+        return $this->belongsTo(ChildPartUnitBom::class, 'id');
+    }
 }

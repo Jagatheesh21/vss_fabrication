@@ -25,7 +25,10 @@ class DatabaseSeeder extends Seeder
             UomSeeder::class,
             ChildPartNumberSeeder::class,
             AssemblePartNumberSeeder::class,
-            NestingSeeder::class
+            NestingSeeder::class,
+            PartMasterSeeder::class,
+            SupplierSeeder::class,
+            ChildPartUnitBomSeeder::class
         ]);
     }
 }

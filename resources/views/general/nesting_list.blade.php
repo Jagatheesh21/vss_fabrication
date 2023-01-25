@@ -90,11 +90,14 @@ $("body").on("change","#unit_weight_{{$loop->iteration}}",function(e){
 function calculate()
 {
     var count = {{$loop->count}};
+    var loop = count+1;
     var total_useage = 0;
     for(var i=1; i<=count; i++) {
         var useage = $("#useage_weight_"+i).val();
-        total_useage = parseFloat(total_useage+useage).toFixed(2);
+        usegae = $.isNumeric(useage)?useage:0;
+        total_useage = parseFloat(total_useage)+parseFloat(useage);
     }
+    
     var avaialable = $("#avaialble_quantity").val();
     $("#total_useage_weight").val(total_useage);
     avaialable = parseFloat(avaialable).toFixed(2);
@@ -121,4 +124,4 @@ function calculate()
         <label for="">Balance Weight</label>
         <input type="number" name="balance_weight" id="balance_weight" class="form-control" min="1" readonly value="0">
     </div>
-    </div>
+</div>

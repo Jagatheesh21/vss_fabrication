@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SubContract;
-use App\Http\Requests\StoreSubContractRequest;
-use App\Http\Requests\UpdateSubContractRequest;
+use App\Models\DeliveryChallan;
+use App\Http\Requests\StoreDeliveryChallanRequest;
+use App\Http\Requests\UpdateDeliveryChallanRequest;
 
-class SubContractController extends Controller
+class DeliveryChallanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,16 +25,16 @@ class SubContractController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreSubContractRequest  $request
+     * @param  \App\Http\Requests\StoreDeliveryChallanRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSubContractRequest $request)
+    public function store(StoreDeliveryChallanRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class SubContractController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\SubContract  $subContract
+     * @param  \App\Models\DeliveryChallan  $deliveryChallan
      * @return \Illuminate\Http\Response
      */
-    public function show(SubContract $subContract)
+    public function show(DeliveryChallan $deliveryChallan)
     {
         //
     }
@@ -53,10 +53,10 @@ class SubContractController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\SubContract  $subContract
+     * @param  \App\Models\DeliveryChallan  $deliveryChallan
      * @return \Illuminate\Http\Response
      */
-    public function edit(SubContract $subContract)
+    public function edit(DeliveryChallan $deliveryChallan)
     {
         //
     }
@@ -64,11 +64,11 @@ class SubContractController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateSubContractRequest  $request
-     * @param  \App\Models\SubContract  $subContract
+     * @param  \App\Http\Requests\UpdateDeliveryChallanRequest  $request
+     * @param  \App\Models\DeliveryChallan  $deliveryChallan
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSubContractRequest $request, SubContract $subContract)
+    public function update(UpdateDeliveryChallanRequest $request, DeliveryChallan $deliveryChallan)
     {
         //
     }
@@ -76,10 +76,10 @@ class SubContractController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\SubContract  $subContract
+     * @param  \App\Models\DeliveryChallan  $deliveryChallan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SubContract $subContract)
+    public function destroy(DeliveryChallan $deliveryChallan)
     {
         //
     }

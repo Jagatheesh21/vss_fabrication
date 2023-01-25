@@ -20,7 +20,8 @@
         <li class="nav-item"><a class="nav-link" href="{{route('part_master.index')}}"><span class="nav-icon"></span>  Child Part Master</a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('nesting.index')}}"><span class="nav-icon"></span>  Nesting </a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('nesting_sequence.index')}}"><span class="nav-icon"></span>  Nesting Sequence </a></li>  
-        <li class="nav-item"><a class="nav-link" href="{{route('child_part_bom.index')}}"><span class="nav-icon"></span>  Child Part BOM </a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{route('sheet_nesting.index')}}"><span class="nav-icon"></span>  Dynamic Nesting Master </a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{route('child_part_unit_bom.index')}}"><span class="nav-icon"></span>  Child Part BOM </a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('process_master.index')}}"><span class="nav-icon"></span>  Process Master </a></li>  
         <li class="nav-item"><a class="nav-link" href="{{route('supplier.index')}}"><span class="nav-icon"></span> Supplier </a></li>  
       </ul>
@@ -43,7 +44,7 @@
         <li class="nav-item"><a class="nav-link" href="{{route("po_master.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>      
         {{-- <li class="nav-item"><a class="nav-link" href="{{route("store_receive.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>       --}}
         <li class="nav-item"><a class="nav-link" href="{{route("store_issue.create")}}"><span class="nav-icon"></span> Store Issue RM </a></li>      
-        {{-- <li class="nav-item"><a class="nav-link" href="{{route("store_issue.dc_issuance")}}"><span class="nav-icon"></span> DC Issuance </a></li>       --}}
+        <li class="nav-item"><a class="nav-link" href="{{route("store_issue.dc_issuance")}}"><span class="nav-icon"></span> DC Issuance </a></li>      
         <li class="nav-item"><a class="nav-link" href="{{route('store_receive_child_part.create')}}"><span class="nav-icon"></span> Store Receive Child Part </a></li>      
         <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Store Issue Child Part </a></li>       
       </ul>

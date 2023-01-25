@@ -32,7 +32,7 @@ class GeneralController extends Controller
         if($request->category_id)
         {
             $category_id = $request->category_id;
-            $types = $types->where('category_id',$category_id);
+            $types = $types->where('category_id',$category_id)->where('id','!=',2);
         }
         $types = $types->get();
         $html = view('general.types',compact('types'))->render();
@@ -123,7 +123,7 @@ class GeneralController extends Controller
         {
             $store_stock_id = $request->store_stock_id;
             $purchase = StoreStock::find($store_stock_id); 
-            return $purchase->available_quantity;
+            return response(['available_quantity'=>$purchase->available_quantity,'unit_weight'=>$purchase->unit_material_quantity]);
             // $nestings = ChildPartBom::where('raw_material_id',$purchase->raw_material_id)->GroupBy('nesting_id')->get();
             // $html = view('store.nesting_list',compact('nestings'))->render();
             // return response(['purchase'=>$purchase,'html' =>$html]);

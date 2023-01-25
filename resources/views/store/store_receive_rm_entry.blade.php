@@ -182,7 +182,7 @@ $("document").ready(function(){
       error:function(response)
       {
       $.each(response.responseJSON.errors,function(field_name,error){
-        alert(error);
+        
         //$(document).find('[name='+field_name+']').after('');
         //$(document).find('[name='+field_name+']').after('<span class="text-strong text-danger">' +error+ '</span>')
       });
@@ -191,6 +191,8 @@ $("document").ready(function(){
   });
   $("#type_id").change(function(e){
     e.preventDefault();
+    
+    $('#operation_save').trigger("reset");
     if($(this).val()=='' || $(this).val()==undefined || $(this).val()==null)
     {
       return false;

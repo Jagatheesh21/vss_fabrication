@@ -25,12 +25,11 @@ class UpdateStoreReceiveRequest extends FormRequest
     {
         return [
             'approved_status' => 'required',
-            'inspection_report' => 'required|max:10000|',
+            'inspection_report' => 'required|max:10000',
             'remarks' => 'required',
             'inward_material_quantity' => 'required',
             'ok_material_quantity' => 'required|numeric|min:1|max:inward_material_quantity',
             'reject_material_quantity' => 'required|numeric|min:0|max:inward_material_quantity',
-            
          ];
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
 @endpush
 
 @section('content')
@@ -147,7 +147,7 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label for="" class="col-sm-12 col-form-label required">Ok Material Quantity *</label>
-                        <input type="text" name="ok_material_quantity" id="ok_material_quantity" class="form-control" value="{{old('ok_material_quantity')}}" required>
+                        <input type="text" name="ok_material_quantity" id="ok_material_quantity" class="form-control" onchange="material_calculation();return false;" value="{{ $store->inward_material_quantity }}"  max="{{ $store->inward_material_quantity }}" required>
                         @error('ok_material_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -156,7 +156,7 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label for="" class="col-sm-12 col-form-label required">Reject Material Quantity*</label>
-                        <input type="text" name="reject_material_quantity" id="reject_material_quantity" class="form-control" value="{{old('reject_material_quantity')}}" required>
+                        <input type="text" name="reject_material_quantity" id="reject_material_quantity" class="form-control" onchange="material_calculation();return false;" value="0"  required>
                         @error('reject_material_quantity')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -211,6 +211,7 @@
 @endsection
 @push('scripts')
 <script src="{{asset('js/select2.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 <script>
   $("#type_id").select2();
   $("#approved_status").select2();
@@ -317,5 +318,27 @@ if(inward>avaialable)
   return false;
 }
 });
+function material_calculation()
+{
+  var total_material_quantity = "{{ $store->inward_material_quantity }}";
+  var ok_quantity = $("#ok_material_quantity").val();
+  var reject_quantity = total_material_quantity-ok_quantity;
+  $("#reject_material_quantity").val(reject_quantity);
+
+  if(parseFloat(ok_quantity)>parseFloat(total_material_quantity)){
+   
+    $.toast({
+                  heading: 'Error',
+                  text: 'Material Quantity Exceeds Total Value',
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'error'
+              });
+    
+              $("#ok_material_quantity").val(total_material_quantity);
+              $("#reject_material_quantity").val(0);
+  }
+}
+
 </script>
 @endpush

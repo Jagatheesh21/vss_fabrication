@@ -27,6 +27,7 @@ class StoreIssueEntryRequest extends FormRequest
             'route_card_type_id' => 'required',
             'route_card_number' => 'required',
             'category_id' => 'required',
+            'store_stock_id' => 'required',
             'type_id' => 'required',
             'raw_material_id' => 'required',
             'nesting_id' => 'required',
@@ -52,6 +53,7 @@ class StoreIssueEntryRequest extends FormRequest
         'unit_weight' => 'Unit Quantity is Required',
         'estimate_quantity' => 'Estimate Quantity is Required',
         'total_useage_weight' => 'Total Useage Quantity is Required',
+        'store_stock_id' => 'GRN is Required!',
 
     ];
 }

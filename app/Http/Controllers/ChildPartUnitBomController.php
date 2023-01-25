@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ChildPartUnitBom;
 use App\Http\Requests\StoreChildPartUnitBomRequest;
 use App\Http\Requests\UpdateChildPartUnitBomRequest;
-
+use Illuminate\Http\Request;
+use DataTables;
+use App\Exports\ChildPartUnitBomExport;
+use Maatwebsite\Excel\Facades\Excel;
 class ChildPartUnitBomController extends Controller
 {
     /**
@@ -13,9 +16,23 @@ class ChildPartUnitBomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+            $data = ChildPartUnitBom::with('child_part_number','uom')->latest()->get();
+      
+                return Datatables::of($data)
+                        ->addIndexColumn()
+                        // ->addColumn('action', function($row){
+       
+                        //        $btn = '<a href="'.route('child_part_unit_bom.edit',$row->id).'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+               
+                        //         return $btn;
+                        // })
+                        // ->rawColumns(['action'])
+                        ->make(true);
+                    }
+                    return view('child_part_unit_bom.index');
     }
 
     /**
@@ -82,5 +99,9 @@ class ChildPartUnitBomController extends Controller
     public function destroy(ChildPartUnitBom $childPartUnitBom)
     {
         //
+    }
+    public function export()
+    {
+        return Excel::download(new ChildPartUnitBomExport, 'bom.xlsx');
     }
 }

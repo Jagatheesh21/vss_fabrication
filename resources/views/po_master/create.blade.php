@@ -159,18 +159,18 @@
             }
             if(type_id==2)
             {
-              $("#uom_id").append("<option value='2' selected>Meters</option>");
-              $("#material_uom_id").append("<option value='3' selected>Nos</option>");
+              $("#uom_id").append("<option value='3' selected>Meters</option>");
+              $("#material_uom_id").append("<option value='2' selected>Nos</option>");
             }
             if(type_id==1)
             {
               $("#uom_id").append("<option value='1' selected>KG</option>");
-              $("#material_uom_id").append("<option value='3' selected>Nos</option>");
+              $("#material_uom_id").append("<option value='2' selected>Nos</option>");
             }
             if(type_id>2)
             {
-              $("#uom_id").append("<option value='3' selected>Nos</option>");
-              $("#material_uom_id").append("<option value='3' selected>Nos</option>");
+              $("#uom_id").append("<option value='2' selected>Nos</option>");
+              $("#material_uom_id").append("<option value='2' selected>Nos</option>");
             }
 
             $.ajax({

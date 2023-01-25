@@ -27,7 +27,7 @@ public static function getNextGrnNumber()
     }
     else 
     {    
-        $number = substr($lastOrder->grn_number,4);
+        $number = substr($lastOrder->grn_number,5);
         $po = 'GRN'.date('y'). sprintf('%05d', intval($number) + 1);
         //$number = $last
     // If we have PO000001 in the database then we only want the number
