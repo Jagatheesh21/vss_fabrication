@@ -54,10 +54,10 @@ class SupplierController extends Controller
     {
     
     try {
-        Supplier::Create($request->validated());
-        return redirect()->back()->withSuccess('Supplier Created Successfully!');
+        Supplier::create($request->validated());
+        return back()->withSuccess('Supplier Created Successfully!');
     } catch (\Throwable $th) {
-        return redirect()->back()->withError($th->getmessage());
+        return back()->withError($th->getmessage());
     }
     }
 
