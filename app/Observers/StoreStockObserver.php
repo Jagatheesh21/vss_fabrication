@@ -4,7 +4,7 @@ namespace App\Observers;
 use Illuminate\Http\Request;
 use App\Models\StoreStock;
 use App\Models\PurchaseOrder;
-
+use App\Models\RouteCardTransaction;
 class StoreStockObserver
 {
     /**
@@ -15,7 +15,17 @@ class StoreStockObserver
      */
     public function created(StoreStock $storeStock)
     {
-    $total_inward_quantity = StoreStock::where('purchase_order_id',$storeStock->purchase_order_id);
+        dd($storeStock);
+    $total_inward_quantity = StoreStock::find($storeStock->id);
+    $stock = StoreStock::find($storeStock->store_stock_id);
+        $total_quantity = ($stock->checked_quantity)*($store->unit_material_quantity);
+        $total_material_quantity = ($stock->checked_quantity);
+        $available_quantity = $stock->available_material_quantity;
+        $issued_qty = RouteCardTransaction::where('route_card_number',$storeStock->route_card_number)->sum('issued_raw_material_quantity');
+        $balance_quantity = $available_quantity-$issued_qty;
+        $store_stock = StoreStock::find($stock->id);
+        $store_stock->available_quantity = $balance_quantity;
+        $store_stock->update;
     //     $purchase =  PurchaseOrder::find($storeStock->purchase_order_id);
     //    if($purchase->useage_quantity==$total_inward_quantity)
     //    {

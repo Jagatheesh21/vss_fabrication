@@ -172,6 +172,7 @@ class StoreReceiveEntryController extends Controller
             $store->checked_quantity = $request->ok_material_quantity;
             $store->rejection_quantity = $request->reject_material_quantity;
             $store->available_quantity = ($request->ok_material_quantity)-($request->reject_material_quantity);
+            $store->available_stock_quantity = (($request->ok_material_quantity)-($request->reject_material_quantity))*($store->unit_material_quantity);
             if($file = $request->file('inspection_report')) {
                 $fileName = $file->getClientOriginalName();
                 $fileName = $filePath .'/'. $fileName;

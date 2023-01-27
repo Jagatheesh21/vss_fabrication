@@ -3,7 +3,7 @@
     <tr>
         <th>Type</th>
         <th>Child Part Number</th>
-        <th>Quantity (KG)</th>
+        <th>Quantity (Nos)</th>
         <th>BOM(KG)</th>
         <th>Total Quantity(KG)</th>
     </tr>

@@ -27,8 +27,10 @@
                 <form id="operation_save" method="POST" action="{{route('store_issue.store')}}">
                   @csrf
                   @method('POST')
-                    <input type="hidden" name="route_card_type_id" value="1">
-                    <div class="row mb-3">
+                  <input type="hidden" name="route_card_type_id" value="1">
+                  <input type="hidden" name="from_operation_id" value="1">
+                  <input type="hidden" name="to_operation_id" value="2">
+                  <div class="row mb-3">
                       <div class="col-md-4 ">
                         <div class="form-group">
                           <label for="" class="col-sm-6 col-form-label">Route Card #</label>
@@ -86,6 +88,12 @@
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
+                          <label for="" class="col-sm-8 col-form-label">Availabe Stock Quantity *</label>
+                          <input type="text" name="available_stock_quantity" class="form-control" id="available_stock_quantity" readonly>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
                           <label for="" class="col-sm-8 col-form-label">Issue Quantity *</label>
                           <input type="text" name="issue_quantity" class="form-control" id="issue_quantity" onpaste="return false;" onkeypress=" return isNumber(event)">
                         </div>
@@ -135,6 +143,28 @@
   $("#type_of_issue").select2();
   $("body").on("click","#submit",function(e){
       e.preventDefault();
+      var utilization = $("#utilization").val();
+      if(utilization==" " || utilization==undefined || utilization==null){
+        $.toast({
+                  heading: 'Error',
+                  text: 'Utilization is Required!',
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'error'
+              });
+        return false;
+      }
+      if(utilization!='' && utilization<70){
+        $.toast({
+                  heading: 'Error',
+                  text: 'Utilization Should Be Greater than 70%!',
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'error'
+              });
+              return false;
+      }
+
       $.ajax({
         url:"{{route('store_issue.store')}}",
         type:"POST",
@@ -294,8 +324,10 @@
       type:"POST",
       data:{store_stock_id:$(this).val(),type_id:type_id},
       success:function(response){
+        console.log(response);
         $("#avaialble_quantity").val(response.available_quantity);
         $("#issue_unit_quantity").val(response.unit_weight);
+        $("#available_stock_quantity").val(response.balance_quantity);
       }
     });
     });  
@@ -325,7 +357,15 @@
   {
     $("#nesting_view").html(" ");
     $(".sheet").hide();
-
+    $("#list_view").html(" ");
+    $.ajax({
+      url:"{{ route('store.dynamic_nesting') }}",
+    type:"GET",
+      success:function(response)
+      {
+        $("#list_view").html(response);
+      }
+    });
   }
   });
   $('body').on('change','#nesting_id',function(e){
@@ -340,7 +380,16 @@
           $("#list_view").html(response);
         }
       });
-
+      $("body").on("click",".add",function(e){
+            e.preventDefault();
+            $.ajax({
+                url:"{{ route('sheet_nesting.nesting_master') }}",
+                type:"GET",
+                success:function(response){
+                    $("#tab_logic").append(response.html);
+                }
+            });
+        });
   // $('body').on('change','#nesting_type_id',function(e){
   //   e.preventDefault();
   //   var nesting_type_id = $(this).val();

@@ -16,6 +16,7 @@ use App\Models\StoreTranscation;
 use App\Models\StoreStock;
 use App\Models\Supplier;
 use App\Models\PurchaseOrder;
+use App\Models\RouteCardTransaction;
 
 use Illuminate\Http\Request;
 
@@ -123,7 +124,10 @@ class GeneralController extends Controller
         {
             $store_stock_id = $request->store_stock_id;
             $purchase = StoreStock::find($store_stock_id); 
-            return response(['available_quantity'=>$purchase->available_quantity,'unit_weight'=>$purchase->unit_material_quantity]);
+            $issued_quantity = RouteCardTransaction::where('store_stock_id',$store_stock_id)->sum('issued_raw_material_quantity');
+            $total_quantity = round(($purchase->checked_quantity)*($purchase->unit_material_quantity),3);
+            $balance_quantity = round(($total_quantity-$issued_quantity),3);
+            return response(['issued_quantity'=>$issued_quantity,'total_quantity'=>$total_quantity,'balance_quantity'=>$balance_quantity,'available_quantity'=>$purchase->available_quantity,'unit_weight'=>$purchase->unit_material_quantity]);
             // $nestings = ChildPartBom::where('raw_material_id',$purchase->raw_material_id)->GroupBy('nesting_id')->get();
             // $html = view('store.nesting_list',compact('nestings'))->render();
             // return response(['purchase'=>$purchase,'html' =>$html]);

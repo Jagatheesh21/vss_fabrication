@@ -31,4 +31,7 @@ class RouteCardTransaction extends Model
      
         return 'A' .date('Y'). sprintf('%06d', intval($number) + 1);
     }
+    public function child_part_number(){
+        return $this->belongsTo(ChildPartNumber::class, 'child_part_number_id');
+    }
 }

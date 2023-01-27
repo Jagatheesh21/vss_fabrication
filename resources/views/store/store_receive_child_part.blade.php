@@ -17,7 +17,7 @@
   <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
-  
+
     <div class="card">
         <div class="card-header">
             <strong>Store - Child Part Receive Entry</strong>
@@ -42,13 +42,24 @@
                         </div>                    
                     </div>
                     <div class="col-md-4">
+                      <div class="form-group">
+                          <label for="" class="control-label required">Previous Stocking Point*</label>
+                          <select name="previous_operation_id" id="previous_operation_id" class="form-control select2">
+                              <option value="">Select Stocking Point</option>
+                              @foreach ($operations as $operation)
+                              @if($operation->id!=1)
+                                  <option value="{{$operation->id}}">{{$operation->name}}</option>
+                              @endif
+                                  @endforeach
+                          </select>
+                      </div>                    
+                  </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label required">Child Part Number*</label>
                             <select name="child_part_number_id" id="child_part_number_id" class="form-control select2">
-                                <option value="">Select Child Part Number</option>
-                                @foreach ($child_part_numbers as $child_part_number)
-                                    <option value="{{$child_part_number->id}}">{{$child_part_number->name}}</option>
-                                @endforeach
+                                <option value="">Select Previous Operation</option>
+                                
                             </select>
                         </div>
                     </div> 
@@ -127,7 +138,37 @@
   $(".close_rc").hide();
   $("#child_part_number_id").select2();
   $("#operation_id").select2();
+  $("#previous_operation_id").select2();
 
+  $("#previous_operation_id").change(function(event){
+    event.preventDefault();
+    $.ajax({
+      url:"{{ route('child_part.getChildParts') }}",
+      type:"POST",
+      data:{operation_id:$(this).val()},
+      success:function(response){
+        $("#child_part_number_id").html(response);
+      }
+    });
+
+  });
+  $("#child_part_number_id").change(function(event){
+    event.preventDefault();
+    var operation_id = $("#previous_operation_id").val();
+    $.ajax({
+      url:"{{ route('child_part.get_route_cards') }}",
+      type:"POST",
+      data:{operation_id:operation_id,child_part_number_id:$(this).val()},
+      success:function(response){
+        $("#prev_route_card_id").html(response);
+        $("#prev_route_card_id").select2({
+          allowdClear:true,
+          placeholder:"Select Route Card",
+        });
+      }
+    });
+
+  });
   $("#type_id").change(function(e){
     e.preventDefault();
     if($(this).val()=='' || $(this).val()==undefined || $(this).val()==null)

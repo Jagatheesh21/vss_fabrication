@@ -8,8 +8,10 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Models\StoreStock;
 use App\Models\PoMaster;
+use App\Models\RouteCardTransaction;
 use App\Observers\StoreStockObserver;
 use App\Observers\PoMasterObserver;
+use App\Observers\RouteCardTransactionObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -31,8 +33,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        StoreStock::observe(StoreStockObserver::class);
+        //StoreStock::observe(StoreStockObserver::class);
         PoMaster::observe(PoMasterObserver::class);
+        RouteCardTransaction::observe(RouteCardTransactionObserver::class);
     }
 
     /**

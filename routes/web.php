@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('store_issue/getSheetNestingLists', [StoreIssueEntryController::class,'getSheetNestingLists'])->name('store.sheet_nesting_lists');
     Route::post('store_issue/getNestingQuantity', [StoreIssueEntryController::class,'getNestingQuantity'])->name('store.nesting_quantity');
     Route::get('store_issue/getDcIssuance', [StoreIssueEntryController::class,'getDcIssuance'])->name('store_issue.dc_issuance');
+    Route::get('store_issue/dynamicNesting', [StoreIssueEntryController::class,'dynamicNesting'])->name('store.dynamic_nesting');
     Route::resource('store_issue', StoreIssueEntryController::class);
     Route::resource('supplier', SupplierController::class);
     Route::get('/purchase_order/print/{id}', [PurchaseOrderController::class,'print'])->name('print');
@@ -96,6 +97,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/nesting_part_numbers', [GeneralController::class,'getNestingPartNumbers'])->name('general.nesting_part_numbers');
     Route::post('/avaialable_quantity', [GeneralController::class,'getAvailableQuantity'])->name('general.avaialable_quantity');
     Route::resource('part_matrix', PartMatrixController::class);
+    Route::post('store_receive_child_part/get_child_part_numbers', [StoreReceiveChildPartController::class,'getChildPartNumbers'])->name('child_part.getChildParts');
+    Route::post('store_receive_child_part/get_route_cards', [StoreReceiveChildPartController::class,'getRouteCards'])->name('child_part.get_route_cards');
     Route::resource('store_receive_child_part', StoreReceiveChildPartController::class);
     Route::resource('po_master', PoMasterController::class);
     Route::get('sheet_nesting/nesting_master', [SheetNestingController::class,'nesting_master'])->name('sheet_nesting.nesting_master');
