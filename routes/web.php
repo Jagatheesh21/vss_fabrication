@@ -110,6 +110,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('sheet_nesting/child_part_numbers', [SheetNestingController::class,'get_child_parts'])->name('sheet_nesting.get_child_parts');
     Route::resource('sheet_nesting', SheetNestingController::class);
     Route::post('raw_material_delivery_challan/get_grns', [RawMaterialDeliveryChallanController::class,'get_grns'])->name('raw_material_delivery_challan.get_grns');
+    Route::post('raw_material_delivery_challan/grn_details', [RawMaterialDeliveryChallanController::class,'grn_details'])->name('raw_material_delivery_challan.grn_details');
     Route::resource('raw_material_delivery_challan', RawMaterialDeliveryChallanController::class);
-    
 });

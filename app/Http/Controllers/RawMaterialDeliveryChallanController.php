@@ -102,5 +102,13 @@ class RawMaterialDeliveryChallanController extends Controller
         }
         return $html;
     }
-
+    public function grn_details(Request $request)
+    {
+        $grn_number_id = $request->grn_number_id;
+        $grn_details = StoreStock::find($grn_number_id);
+        $total_quantity = $grn_details->inward_quantity;
+        $issued_quantity = RawMaterialDeliveryChallan::where('grn_id',$grn_number_id)->sum('issued_quantity');
+        $available_quantity = $total_quantity-$issued_quantity;
+        //return response(['total_qu']); 
+    }
 }

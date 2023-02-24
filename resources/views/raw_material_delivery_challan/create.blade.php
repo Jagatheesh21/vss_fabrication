@@ -79,7 +79,7 @@
   $("#raw_material_id").change(function(e){
     e.preventDefault();
     if($(this).val()=="" || $(this).val()==null || $(this).val()==undefined){
-      alert("GRN value is Required!");
+      alert("Raw Material is Required!");
       return false;
     }
     $.ajax({
@@ -95,6 +95,23 @@
         });
       }
     });
-  });      
+  });  
+  // Getting GRN Details
+  $("#grn_number_id").change(function(e){
+    if($(this).val()=="" || $(this).val()==null || $(this).val()==undefined){
+      alert("GRN Number is Required!");
+      return false;
+    }
+    $.ajax({
+      url:"{{ route('raw_material_delivery_challan.grn_details') }}",
+      type:"POST",
+      data:{grn_number_id:$(this).val()},
+      success:function(response)
+      {
+        console.log(response);
+      }
+    });
+  });
+  
 </script>  
 @endpush
