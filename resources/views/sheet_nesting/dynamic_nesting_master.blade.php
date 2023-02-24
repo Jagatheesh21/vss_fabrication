@@ -1,9 +1,8 @@
-
 <tr class="nesting_row">
     <td>
         <div class="col-md-12">
             <div class="form-group">
-                <select name="nesting_type_id[]" class="type_id form-control select2">
+                <select name="type_id[]" class="type_id form-control select2">
                     <option value="">Select Type</option>
                     @foreach ($types as $type)
                         <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -24,21 +23,21 @@
     <td>
         <div class="col-md-12">
             <div class="form-group">
-                <input type="number" class="form-control issue_quantity" name="quantity[]" value="0">
+                <input type="number" class="form-control issue_quantity" name="issue_quantity[]" value="0">
             </div>
         </div>
     </td>
     <td>
         <div class="col-md-12">
             <div class="form-group">
-                <input type="number" class="form-control bom" name="unit_weight[]" value="0">
+                <input type="number" class="form-control bom" name="bom[]" value="0">
             </div>
         </div>
     </td>
     <td>
         <div class="col-md-12">
             <div class="form-group">
-                <input type="number" class="form-control total_issue_quantity" name="useage_weight[]" value="0">
+                <input type="number" class="form-control total_issue_quantity" name="total_issue_quantity[]" value="0">
             </div>
         </div>
     </td>
@@ -51,14 +50,3 @@
         </div>
     </td>
 </tr>
-<script>
-        $(".type_id").select2({
-            placeholder:"Select Type",
-            allowedClear:true,
-        });        
-        $(".child_part_number_id").select2({
-            placeholder:"Select Child Part Number",
-            allowedClear:true,
-        });
-
-</script>

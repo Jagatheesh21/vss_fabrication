@@ -1,12 +1,31 @@
-<tr id='addr'>
-    <td>1</td>
-    <td><select class="form-control" name="purchase_type[]" id="purchase_type0">
-      <option value="1">Raw Material</option>  
-      <option value="2">Others</option>  
-    </select></td>
-    <td></td>
-    <td><input type="text" name='product[]'  placeholder='Enter Product Name' class="form-control"/></td>
-    <td><input type="number" name='qty[]' placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
-    <td><input type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
-    <td><input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/></td>
-  </tr>
+  <td>{{ $count }}</td>
+  <td>
+    <div class="col-md-12">
+      <select class="form-control" name="raw_material_id[]" id="raw_material_id_{{ $count }}">
+        <option value="">Select Raw Material</option>
+        @foreach ($raw_materials as $raw_material)
+            <option value="{{ $raw_material->id }}">{{ $raw_material->type->name }}-{{ $raw_material->name }}</option>
+        @endforeach
+      </select>
+    </div>
+    </td>
+  <td>
+    <div class="col-md-12">
+      <input type="number" name='quantity[]' id="qty_{{ $count }}" placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
+
+    </div>
+  <td>
+    <div class="col-md-12">
+      <input type="number" name='price[]' id="price_{{ $count }}" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
+    </div>
+  <td>
+    <div class="col-md-12"> 
+      <input type="number" name='total[]' id="total_{{ $count }}" placeholder='0.00' class="form-control total" readonly/></td>
+    </div>
+  </td>
+<script>
+  $("#raw_material_id_{{ $count }}").select2({
+    allowedClear:true,
+    placeholder:"Select Material",
+  });
+</script>

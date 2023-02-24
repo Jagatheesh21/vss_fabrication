@@ -8,10 +8,12 @@ use App\Models\StoreStock;
 use App\Models\ChildPartNumber;
 use App\Models\Category;
 use App\Models\ChildPartBom;
+use App\Models\ChildPartUnitBom;
 use App\Models\Operation;
 use App\Models\Type;
 use App\Models\RawMaterial;
 use App\Models\Nesting;
+use App\Models\PartMaster;
 use App\Models\NestingSequence;
 use App\Models\SheetNesting;
 use App\Models\StoreTransaction;
@@ -56,9 +58,8 @@ class StoreIssueEntryController extends Controller
      */
     public function store(StoreIssueEntryRequest $request)
     {
-        //dd($request->validated());
+        dd($request->all());
         try {
-            //StoreTransaction::create($request->validated());
             $nesting_types = $request->input('nesting_type_id');
             $child_part_numbers = $request->input('child_part_number_id');
             $unit_weights = $request->input('issue_unit_quantity');
@@ -66,7 +67,6 @@ class StoreIssueEntryController extends Controller
             $estimate_quantities = $request->input('quantity');
             $type_of_issue = $request->input('type_of_issue');
             $nesting_id = $request->input('nesting_id');
-            $type_of_issue = $request->input('type_of_issue');
             $store_stock_id = $request->input('store_stock_id');
             foreach($nesting_types as $key=>$nesting_type)
             {
@@ -83,11 +83,16 @@ class StoreIssueEntryController extends Controller
                 $rc->child_part_number_id = $child_part_numbers[$key];
                 $rc->type_of_issue = $type_of_issue;
                 $rc->nesting_number = $nesting_id??NULL;
+                $rc->nesting_type_id = $nesting_type;
                 $rc->store_stock_id = $store_stock_id;
                 $rc->save();
             }
             //return response()->withSuccess('Route Card Generated Successfully!');
-            return response()->json('Success', 200);
+            //return response()->json('Success', 200);
+            return response()->json([
+                'status'=>200,
+                'message'=>'Route Card Generated Successfully!'
+            ]);
         } catch (\Throwable $th) {
             //throw $th;
             return back()->withError($th->getMessage());
@@ -184,6 +189,24 @@ class StoreIssueEntryController extends Controller
         $child_part_numbers = ChildPartNumber::where('status',1)->get();
         return $html = view("store.dynamic_nesting_list",compact('types','child_part_numbers'))->render();
 
+    }
+    public function nesting_child_parts(Request $request)
+    {
+        $type_id = $request->input('type_id');
+        $child_parts = PartMaster::with('child_part')->where('type_id',$type_id)->get();
+        $html = "<option value=''>Select Child Part Number</option>";
+        foreach($child_parts as $child_part)
+        {
+            $child_part_number = $child_part->child_part->name;
+            $html.="<option value='".$child_part->child_part->id."'>".$child_part_number."</option>";
+        }
+        return $html;
+    }
+    public function child_part_bom(Request $request)
+    {
+        $child_part_number_id = $request->input('child_part_number_id');
+        $unit_bom = ChildPartUnitBom::where('child_part_number_id',$child_part_number_id)->first();
+        return $unit_bom->bom;
     }
 }
 

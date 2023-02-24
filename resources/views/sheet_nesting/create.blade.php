@@ -105,7 +105,11 @@
                             </table>
                         </div>
                     </div> 
-                                    
+                     <table>
+                        <tbody>
+
+                        </tbody>
+                    </table>               
                     <button type="button" id="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
@@ -192,5 +196,7 @@
             }
         });            
         });
+
     </script>
+    
 @endpush

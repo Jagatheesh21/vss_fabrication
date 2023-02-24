@@ -75,12 +75,6 @@
             var avaialable = $("#issue_unit_quantity").val();
             $("#total_useage_weight").val(total_useage);
             avaialable = parseFloat(avaialable).toFixed(2);
-            // if(total_useage>avaialable)
-            // {
-            //     alert("Exceeding the Available Quantity!");
-            //     $("#total_useage_weight").val(0);
-            //     return false;
-            // }
             var balance = parseFloat(avaialable-total_useage).toFixed(2);
             $("#balance_weight").val(balance);
             var utilization = ((total_useage/avaialable)*100).toFixed(2);
@@ -107,7 +101,7 @@
                 <label for="">Balance Weight</label>
             </div>
         </td>
-        <td>
+        <td colspan="2">
             <div class="col-md-9">
                 <input type="number" name="balance_weight" id="balance_weight" class="form-control" min="1" readonly value="0">
             </div>

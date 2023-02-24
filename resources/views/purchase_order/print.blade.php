@@ -26,7 +26,7 @@
 <div class="row border border-secondary rounded" >
     <div class="col-md-6">
         <h5>Supplier Name & Address : </h5>
-        <p>,</p>
+        <p>{!! $purchase_order->address !!}</p>
         
         <p></p>
     </div>
@@ -47,8 +47,8 @@
 </div>
 <br>
 <div class="row  border border-secondary rounded">
-    <table class="col-md-12" style="height:450px !important" >
-        <tr style="border-bottom: 1px solid;">
+    <table class="col-md-12" style="min-height:400px !important" >
+        <tr style="border-bottom: 1px solid; height:10%">
             <th width="10%">S.No</th>
             <th width="30%"><center>Description Of Goods</center></th>
             <th width="10%">Tarif/HSN Classification</th>
@@ -58,27 +58,27 @@
             <th width="10%">Unit Rate</th>
             <th width="10%">Total</th>
         </tr>
-        
-        <tr>
+        @foreach($purchase_order->purchase_order_items as $item)
+        <tr style="height:10%">
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $item->raw_material->name }}</td>
+            <td>--</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ $item->quantity }}</td>
+            <td>{{ $item->uom->name }}</td>
+            <td>{{ $item->unit_price }}</td>
+            <td>{{ number_format($item->total_price,2) }}</td>
         </tr>
-
+        @endforeach
         <tr>
-            <td colspan="8" style="padding:10px">  </td>
+            <td colspan="8" style="padding:10px;height:10%">  </td>
         </tr>
         
         
-        <tr class="border border-secondary">
+        <tr class="border border-secondary" style="height:10%">
             <td colspan="4"><b>Rupess : </b></td>
-            <td colspan="2" align="right"><b>Grand Total :</b></td>
-            <td colspan="2" align="right"></td>
+            <td colspan="3" align="center"><b>Grand Total :</b></td>
+            <td  >{{ number_format($purchase_order->total_price,2) }}</td>
         </tr>
         
     </table>
@@ -86,12 +86,12 @@
 <br>
 <div class="row py-3 border border-secondary rounded">
     <div class="col-md-8"> 
-         <p>Terms : <br>
+         <p>Terms : {{ $purchase_order->delivery_terms }}<br>
             Packing  : <br>
-            Payment Terms :  <br>
-            Despatch Mode :  <br>
-             SGST : <br>
-             CGST : </p>
+            Payment Terms : {{ $purchase_order->payment_terms }} <br>
+            Despatch Mode :  {{ $purchase_order->mode_of_dispatch }}<br>
+             SGST : {{ $purchase_order->sgst }}%<br>
+             CGST : {{ $purchase_order->cgst }}%</p>
     </div>
     <div class="col-md-4">
         <p>SCHEDULE DETAILS :</p>

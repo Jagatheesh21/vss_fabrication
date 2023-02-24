@@ -34,7 +34,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         //StoreStock::observe(StoreStockObserver::class);
-        PoMaster::observe(PoMasterObserver::class);
+        //PoMaster::observe(PoMasterObserver::class);
         RouteCardTransaction::observe(RouteCardTransactionObserver::class);
     }
 

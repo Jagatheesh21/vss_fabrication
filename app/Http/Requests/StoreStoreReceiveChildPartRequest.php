@@ -13,7 +13,7 @@ class StoreStoreReceiveChildPartRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,13 @@ class StoreStoreReceiveChildPartRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'previous_route_card_type_id'=>'required',
+            'previous_route_card_type_id'=>'required',
+            'operation_id' => 'required',
+            'previous_operation_id' => 'required',
+            'child_part_number_id.*' => 'required',
+            'issued_quantity.*' => 'required|numeric|between:1,999999.999',
+            'ok_quantity.*' => 'required|numeric|between:1,999999.999',
         ];
     }
 }

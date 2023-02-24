@@ -324,7 +324,6 @@
       type:"POST",
       data:{store_stock_id:$(this).val(),type_id:type_id},
       success:function(response){
-        console.log(response);
         $("#avaialble_quantity").val(response.available_quantity);
         $("#issue_unit_quantity").val(response.unit_weight);
         $("#available_stock_quantity").val(response.balance_quantity);
@@ -380,16 +379,8 @@
           $("#list_view").html(response);
         }
       });
-      $("body").on("click",".add",function(e){
-            e.preventDefault();
-            $.ajax({
-                url:"{{ route('sheet_nesting.nesting_master') }}",
-                type:"GET",
-                success:function(response){
-                    $("#tab_logic").append(response.html);
-                }
-            });
-        });
+
+
   // $('body').on('change','#nesting_type_id',function(e){
   //   e.preventDefault();
   //   var nesting_type_id = $(this).val();
@@ -409,4 +400,5 @@
   // });
   });
   </script>
+
 @endpush

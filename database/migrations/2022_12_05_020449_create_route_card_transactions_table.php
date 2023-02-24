@@ -15,18 +15,20 @@ return new class extends Migration
     {
         Schema::create('route_card_transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('route_card_type_id');
-            $table->string('route_card_number');
+            $table->integer('route_card_type_id')->nullable();
+            $table->string('route_card_number')->nullable();
             $table->integer('from_operation_id');
             $table->integer('to_operation_id');
             $table->string('prev_route_card_type_id')->nullable();
             $table->string('prev_route_card_number')->nullable();
             $table->integer('raw_material_id')->nullable();
-            $table->integer('issued_raw_material_quantity')->nullable();
+            $table->decimal('issued_raw_material_quantity',16,3)->default(0.000);
             $table->integer('child_part_number_id');
-            $table->decimal('issued_quantity',16,2)->default(0.00);
-            $table->decimal('rejected_quantity',16,2)->default(0.00);
-            $table->decimal('rework_quantity',16,2)->default(0.00);
+            $table->integer('nesting_type_id');
+            $table->decimal('issued_quantity',16,3)->default(0.000);
+            $table->decimal('ok_quantity',16,3)->default(0.000);
+            $table->decimal('rejected_quantity',16,3)->default(0.000);
+            $table->decimal('rework_quantity',16,3)->default(0.000);
             $table->integer('status')->default(1);
             $table->timestamp('closed_date')->nullable();
             $table->integer('user_id');

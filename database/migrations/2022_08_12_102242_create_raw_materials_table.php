@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignId('type_id');
             $table->string('name');
             $table->text('part_description')->nullable();
+            $table->decimal('unit_weight',16,3);
+            $table->integer('uom_id');
             $table->integer('status')->default(1);
             $table->softDeletes();
             $table->timestamps();

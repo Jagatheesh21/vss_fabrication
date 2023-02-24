@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @push('styles')
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
 @endpush
 
 @section('content')
@@ -90,6 +91,16 @@
                         @enderror
                       </div>
                     </div>
+                    
+                    <div class="col-sm-4">
+                      <label for="name" class="col-sm-6 col-form-label required">Available Weight*</label>
+                      <div class="form-group">
+                      <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control">
+                      @error('available_quantity')
+                      <span class="text-danger">{{$message}}</span>
+                      @enderror  
+                    </div>
+                    </div>
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-2 col-form-label required">UOM*</label>
                       <div class="form-group">
@@ -102,15 +113,6 @@
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-6 col-form-label required">Available Weight*</label>
-                      <div class="form-group">
-                      <input type="text" name="available_quantity" id="available_quantity" readonly class="form-control">
-                      @error('available_quantity')
-                      <span class="text-danger">{{$message}}</span>
-                      @enderror  
-                    </div>
-                    </div>
-                    <div class="col-sm-4">
                       <label for="name" class="col-sm-6 col-form-label required">Available Material*</label>
                       <div class="form-group">
                       <input type="text" name="available_material_quantity" id="available_material_quantity" readonly class="form-control">
@@ -119,7 +121,15 @@
                       @enderror   
                     </div>
                     </div>
-
+                    <div class="col-md-4">
+                      <label for="name" class="col-sm-6 col-form-label required">Material UOM*</label>
+                      <select name="material_uom_id"  class="form-control" id="material_uom_id">
+                        <option value="">Select Material Uom</option>
+                      </select>
+                      @error('material_uom_id')
+                      <span class="text-danger">{{$message}}</span>
+                      @enderror
+                    </div>
                     <div class="col-sm-4">
                       <label for="name" class="col-sm-12 col-form-label required">Issue Material Quantity*</label>
                       <div class="form-group">
@@ -140,7 +150,7 @@
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <label for="name" class="col-sm-4 col-form-label required">Issue Quantity*</label>
+                      <label for="name" class="col-sm-6 col-form-label required">Inward Quantity*</label>
                       <div class="form-group">
                       <input type="text" name="inward_quantity" id="inward_quantity" value="{{old('inward_quanity')}}" class="form-control" readonly>
                       @error('inward_quantity')
@@ -151,7 +161,7 @@
                   </div>  
                     <div class="row mb-0">
                         <div class="col-md-8 offset-md-4">
-                           <button type="button" id="submit" class="btn btn-primary">Save</button>
+                           <button type="button" id="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to Save?')">Save</button>
                         </div>
                     </div>
                   </form>
@@ -161,12 +171,11 @@
 
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 <script src="{{asset('js/select2.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 <script>
-$("document").ready(function(){
-  $.toast('Here you can put the text of the toast')
-});
+
   $("#type_id").select2();
 
   $("#submit").click(function(){
@@ -177,37 +186,72 @@ $("document").ready(function(){
       data:$("#operation_save").serialize(),
       success:function(response)
       {
-
+        $.toast({
+                  heading: 'Success',
+                  text: response.message,
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'success'
+              });
+                    
+              window.location.href="{{ route('store_receive.index') }}"; 
       },
       error:function(response)
       {
       $.each(response.responseJSON.errors,function(field_name,error){
-        
-        //$(document).find('[name='+field_name+']').after('');
-        //$(document).find('[name='+field_name+']').after('<span class="text-strong text-danger">' +error+ '</span>')
-      });
+        $.toast({
+                  heading: 'Error',
+                  text: error,
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'error'
+              })
+        });
       }
     });
   });
+  // On change Event On Type 
   $("#type_id").change(function(e){
     e.preventDefault();
-    
-    $('#operation_save').trigger("reset");
+    //$('#operation_save').trigger("reset");
     if($(this).val()=='' || $(this).val()==undefined || $(this).val()==null)
     {
+      $("#raw_material_id").html('');
+      $("#purchase_order_id").html('');
       return false;
     }
+    var type_id = $(this).val();
+            if(type_id=="" || type_id==null || type_id==undefined)
+            {
+                return false;
+            }
+            if(type_id==2)
+            {
+              $("#uom_id").append("<option value='3' selected>Meters</option>");
+              $("#material_uom_id").append("<option value='2' selected>Nos</option>");
+            }
+            if(type_id==1)
+            {
+              $("#uom_id").append("<option value='1' selected>KG</option>");
+              $("#material_uom_id").append("<option value='2' selected>Nos</option>");
+            }
+            if(type_id>2)
+            {
+              $("#uom_id").append("<option value='2' selected>Nos</option>");
+              $("#material_uom_id").append("<option value='2' selected>Nos</option>");
+            }
     $.ajax({
       url:"{{route('store.materials')}}",
       type:"POST",
       data:{type_id:$(this).val()},
       success:function(response)
       {
-        var data = JSON.parse(response);
-        $("#raw_material_id").append("<option value=''>Select Raw Material</option>");
-        $.each(data, function (i, item) {
-          $("#raw_material_id").append("<option value='"+item.id+"'>" + item.name + "-"+item.part_description+"</option>");
-        });
+        $("#raw_material_id").html(response);
+        // var data = JSON.parse(response);
+        // $("#raw_material_id").append("<option value=''>Select Raw Material</option>");
+        // $.each(data, function (i, item) {
+        //   $("#raw_material_id").append("<option value='"+item.id+"'>" + item.name + "-"+item.part_description+"</option>");
+        // });
         $("#raw_material_id").select2({
         allowedClear:true,
         placeholder:'Select Raw Material'
@@ -215,7 +259,7 @@ $("document").ready(function(){
       }
     });
   });
-
+// Onchange event on raw material
   $("#raw_material_id").change(function(){
     var raw_material_id = $(this).val();
     if(raw_material_id=="" || raw_material_id==undefined || raw_material_id==null)
@@ -230,11 +274,13 @@ $("document").ready(function(){
       {
         if(response!='')
         {
-          var data = JSON.parse(response);
-        $("#purchase_order_id").append("<option value=''>Select Purchase Order</option>");
-        $.each(data, function (i, item) {
-          $("#purchase_order_id").append("<option value='"+item.id+"'>" + item.rm_po_number + "</option>");
-        });
+          //var data = JSON.parse(response);
+          $("#purchase_order_id").html(response.orders);
+          $("#uom_id").html(response.uom);
+        // $("#purchase_order_id").append("<option value=''>Select Purchase Order</option>");
+        // $.each(data, function (i, item) {
+        //   $("#purchase_order_id").append("<option value='"+item.purchase_order_id+"'>" + item.purchase_order.purchase_order_number + "</option>");
+        // });
         $("#purchase_order_id").select2({
         allowedClear:true,
         placeholder:'Select Purchase Order'
@@ -320,6 +366,7 @@ $("document").ready(function(){
 // });
 $("#purchase_order_id").change(function(e){
   e.preventDefault();
+  var raw_material_id = $("#raw_material_id").val();
   if($(this).val()=="" || $(this).val()==null || $(this).val()==undefined)
   {
     alert("Please Select Purchase Order..");
@@ -328,18 +375,18 @@ $("#purchase_order_id").change(function(e){
     var purchase_order_id = $(this).val();
     $.ajax({
       url:"{{route('store.getPurchaseOrder')}}",
-      data:{purchase_order_id:purchase_order_id},
+      data:{purchase_order_id:purchase_order_id,raw_material_id:raw_material_id},
       type:"POST",
       success:function(response)
       {
-        $("#supplier_id").html('<option value='+response.test.supplier.id+'>'+response.test.supplier.code+'</option>');
-        $("#raw_material_id").html('<option value='+response.test.raw_material.id+'>'+response.test.raw_material.name+'-'+response.test.raw_material.part_description+'</option>');
-        $("#type_id").html('<option value='+response.type.id+'>'+response.type.name+'</option>');
-        $("#uom_id").html('<option value='+response.test.uom.id+'>'+response.test.uom.name+'</option>');
+        $("#supplier_id").html('<option value='+response.purchase_order.supplier_id+'>'+response.purchase_order.supplier.code+'</option>');
+        // $("#raw_material_id").html('<option value='+response.test.raw_material.id+'>'+response.test.raw_material.name+'-'+response.test.raw_material.part_description+'</option>');
+        // $("#type_id").html('<option value='+response.type.id+'>'+response.type.name+'</option>');
+        // $("#uom_id").html('<option value='+response.test.uom.id+'>'+response.test.uom.name+'</option>');
         $("#available_quantity").val(response.available_quantity);
-        $("#available_material_quantity").val(response.available_material);
-        $("#unit_material_quantity").val(response.unit_material_quantity);
-        $("#invoice_number").val(response.test.invoice_number);
+        $("#available_material_quantity").val(response.available_material_quantity);
+        $("#unit_material_quantity").val(response.unit_weight);
+        $("#invoice_number").val(response.purchase_order.invoice_number);
       }
     });
   }

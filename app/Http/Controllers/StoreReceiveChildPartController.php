@@ -55,7 +55,29 @@ class StoreReceiveChildPartController extends Controller
      */
     public function store(StoreStoreReceiveChildPartRequest $request)
     {
-        //
+        try {
+            $child_part_numbers = $request->input('child_part_number_id');
+            $issued_quantity = $request->input('issued_quantity');
+            $ok_quantity = $request->input('ok_quantity');
+            foreach($child_part_numbers as $key=>$child_part)
+            {
+                $rc = new RouteCardTransaction;
+                $rc->from_operation_id = $request->previous_operation_id;
+                $rc->to_operation_id = $request->operation_id;
+                $rc->prev_route_card_type_id = $request->previous_route_card_type_id;
+                $rc->prev_route_card_number = $request->prev_route_card_id;
+                $rc->child_part_number_id = $child_part;
+                $rc->ok_quantity = $ok_quantity[$key];
+                $rc->ip_address = $request->ip();
+                $rc->user_id = auth()->user()->id;
+                $rc->save();
+            }
+            return response()->json('Success', 200);
+            //return back()->withSuccess('Route Card Received Successfully!');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->withError($th->getMessage());
+        }
     }
 
     /**
@@ -104,27 +126,22 @@ class StoreReceiveChildPartController extends Controller
     }
     public function getChildPartNumbers(Request $request)
     {
-        $from_operation = 1;
-        $operation_id = $request->operation_id;
-        $child_part_numbers = RouteCardTransaction::with('child_part_number')->where('from_operation_id',$from_operation)->where('to_operation_id',$operation_id)->GroupBy('child_part_number_id')->where('closed_date',NULL)->get();
-        $html = "<option value=''>Select Child Part Number</option>";
-        foreach($child_part_numbers as $child_part_number)
-        {
-            $part_number = $child_part_number->child_part_number->name;
-            $html.="<option value='$child_part_number->child_part_number_id'>$part_number</option>";
-        }
-        return $html;
+        $route_card_id = $request->route_card_id;
+        $child_part_numbers = RouteCardTransaction::with('child_part_number')->where('route_card_number',$route_card_id)->get();
+        $child_parts = ChildPartNumber::get();
+        $route_card_type = RouteCardTransaction::select('route_card_type_id')->where('route_card_number',$route_card_id)->GroupBy('route_card_number')->first();
+        $html = view('store.receive_child_parts',compact('child_part_numbers','child_parts'))->render();
+        return response(['html'=>$html,'route_card_type'=>$route_card_type->route_card_type_id]);
+        
     }
     public function getRouteCards(Request $request)
     {
-        $from_operation = 1;
         $operation_id = $request->operation_id;
-        $child_part_number_id = $request->child_part_number_id;
-        $route_cards = RouteCardTransaction::where('from_operation_id',$from_operation)->where('to_operation_id',$operation_id)->where('child_part_number_id',$child_part_number_id)->where('closed_date',NULL)->get();
+        $route_cards = RouteCardTransaction::where('to_operation_id',$operation_id)->where('closed_date',NULL)->OrderBy('created_at')->get();
         $html = "<option value=''>Select Previous Route Card</option>";
         foreach($route_cards as $route_card)
         {
-            $html.="<option value='$route_card->id'>$route_card->route_card_number</option>";
+            $html.="<option value='$route_card->route_card_number'>$route_card->route_card_number</option>";
         }
         return $html;
     }

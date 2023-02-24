@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
 @endpush
 
 @section('content')
@@ -43,9 +43,9 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                          <label for="" class="control-label required">Previous Stocking Point*</label>
+                          <label for="" class="control-label required">Operation*</label>
                           <select name="previous_operation_id" id="previous_operation_id" class="form-control select2">
-                              <option value="">Select Stocking Point</option>
+                              <option value="">Select Operation</option>
                               @foreach ($operations as $operation)
                               @if($operation->id!=1)
                                   <option value="{{$operation->id}}">{{$operation->name}}</option>
@@ -54,15 +54,7 @@
                           </select>
                       </div>                    
                   </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="" class="control-label required">Child Part Number*</label>
-                            <select name="child_part_number_id" id="child_part_number_id" class="form-control select2">
-                                <option value="">Select Previous Operation</option>
-                                
-                            </select>
-                        </div>
-                    </div> 
+ 
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label required">Prev.Route Card*</label>
@@ -72,58 +64,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <table class="table table-bordered table-responsive text-bold m-3">
-                            
-                            <tr>
-                                <th></th>
-                                <th class="text-center">Item Description</th>
-                                <th class="text-center">Issued Quantity</th>
-                            </tr>
-                            <tr>
-                              <td class="text-bold text-center">Previous Route Card Details</td>
-                                <td>
-                                    <div class="form-group">
-                                        <select name="raw_material_id" id="raw_material_id" class="form-control select2">
-                                            <option value="">Select Item Description</option>
-
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <input type="text" name="issued_quantity" id="issued_quantity" required readonly class="form-control">
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                        </table>
-                        <table>
-                          <tr>
-                            <th></th>
-                          </tr>
-                        </table>
-                        <tr>
-                          <td></td>
-                          <td>CLOSE RC</td>
-                            <td><div class="form-group">
-                              <div class="form-check form-check-inline close_rc">
-                                <input class="form-check-input" type="radio" name="close_rc" id="yes" value="YES">
-                                <label class="form-check-label" for="inlineRadio1">YES</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="close_rc" id="no" value="NO" checked>
-                                <label class="form-check-label" for="inlineRadio2">NO</label>
-                              </div>
-                            </div></td>
-                          <td></td>
-                        </tr>
+                    <input type="hidden" name="previous_route_card_type_id" id="previous_route_card_type_id" value="">
+                    <div class="row" id="receive_table">
+                        
                     </div>
-
                   </div>  
                     <div class="row mb-0">
                         <div class="col-md-8 offset-md-4">
-                           <button type="submit" id="submit" class="btn btn-primary">Save</button>
+                           <button type="button" id="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                   </form>
@@ -134,6 +82,8 @@
 @endsection
 @push('scripts')
 <script src="{{asset('js/select2.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+
 <script>
   $(".close_rc").hide();
   $("#child_part_number_id").select2();
@@ -142,23 +92,11 @@
 
   $("#previous_operation_id").change(function(event){
     event.preventDefault();
-    $.ajax({
-      url:"{{ route('child_part.getChildParts') }}",
-      type:"POST",
-      data:{operation_id:$(this).val()},
-      success:function(response){
-        $("#child_part_number_id").html(response);
-      }
-    });
-
-  });
-  $("#child_part_number_id").change(function(event){
-    event.preventDefault();
     var operation_id = $("#previous_operation_id").val();
     $.ajax({
       url:"{{ route('child_part.get_route_cards') }}",
       type:"POST",
-      data:{operation_id:operation_id,child_part_number_id:$(this).val()},
+      data:{operation_id:operation_id},
       success:function(response){
         $("#prev_route_card_id").html(response);
         $("#prev_route_card_id").select2({
@@ -167,6 +105,28 @@
         });
       }
     });
+
+  });
+  $("#prev_route_card_id").change(function(e){
+    e.preventDefault();
+    if($(this).val()=="" || $(this).val()==null || $(this).val()==undefined){
+      alert("Route Card Value is Required!");
+      return false;
+    }
+    $.ajax({
+      url:"{{ route('child_part.getChildParts') }}",
+      type:"POST",
+      data:{route_card_id:$(this).val()},
+      success:function(response)
+      {
+        console.log(response);
+        $("#receive_table").html(response.html);
+        $("#previous_route_card_type_id").val(response.route_card_type);
+      }
+    });
+  });
+  $("#child_part_number_id").change(function(event){
+    event.preventDefault();
 
   });
   $("#type_id").change(function(e){
@@ -267,6 +227,43 @@ if(inward>avaialable)
   //$("#inward_quantity").val("");
   return false;
 }
+});
+// validation
+$("#submit").click(function(e){
+  e.preventDefault();
+  $.ajax({
+    url:"{{ route("store_receive_child_part.store") }}",
+    type:"POST",
+    data:$("#operation_save").serialize(),
+    success:function(response)
+    {
+      var result = $.parseJSON(result.responseText);
+      $.toast({
+                  heading: 'Success',
+                  text: result.message,
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'success'
+              });
+          
+      location.reload(true);
+    },
+    error:function(result)
+    {
+      var response = $.parseJSON(result.responseText);
+            $.each(response.errors, function(key, val) {
+              $.toast({
+                  heading: 'Error',
+                  text: val,
+                  showHideTransition: 'plain',
+                  position: 'top-right',
+                  icon: 'error'
+              })
+            })
+
+    }
+  });
+
 });
 </script>
 @endpush

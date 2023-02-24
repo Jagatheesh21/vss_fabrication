@@ -31,5 +31,9 @@ class RawMaterial extends Model
     {
         return $this->belongsTo(StoreStock::class,'raw_material_id');
     }
+    public function uom()
+    {
+        return $this->belongsTo(Uom::class,'uom_id');
+    }
 
 }

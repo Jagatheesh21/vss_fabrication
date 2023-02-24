@@ -24,14 +24,28 @@ class StorePurchaseOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'purchase_order_number' => 'required',
             'supplier_id' => 'required',
-            'raw_material_id' => 'required',
+            'purchase_order_number' => 'required',
+            'reference_number' => 'required',
+            'state' => 'required',
+            'state_code' => 'required',
+            'pin_code' => 'required',
+            'address' => 'required',
+            'delivery_terms' => 'required',
+            'mode_of_dispatch' => 'required',
+            'payment_terms' => 'required',
             'purchase_order_date' => 'required',
-            'quantity' => 'required',
-            'unit_quantity' => 'required',
-            'total_quantity' => 'required',
-            'uom_id' => 'required',
+            'sub_total' => 'required',
+            'cgst' => 'required',
+            'igst' => 'required',
+            'sgst' => 'required',
+            'tax' => 'required',
+            'tax_amount' => 'required',
+            'total_amount' => 'required',
+            'raw_material_id.*' => 'required',
+            'quantity.*' => 'required',
+            'price.*' => 'required',
+            'total_quantity.*' => 'required',
         ];
     }
 }

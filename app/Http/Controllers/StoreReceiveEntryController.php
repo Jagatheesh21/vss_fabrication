@@ -15,6 +15,7 @@ use App\Models\Supplier;
 use App\Models\Uom;
 use Auth;
 use App\Models\StoreStock;
+use App\Models\StoreTransaction;
 use App\Http\Requests\StoreStockRMEntryRequest;
 use App\Http\Requests\UpdateStoreReceiveRequest;
 use DB;
@@ -84,7 +85,7 @@ class StoreReceiveEntryController extends Controller
      */
     public function store(StoreStockRMEntryRequest $request)
     {
-        DB::beginTransaction();
+       // DB::beginTransaction();
         try {
         $store = new StoreStock;
         $store->grn_number = $request->grn_number;
@@ -96,19 +97,20 @@ class StoreReceiveEntryController extends Controller
         $store->supplier_id = $request->supplier_id;
         $store->invoice_number = $request->invoice_number;
         $store->inward_quantity = $request->inward_quantity;
+        $store->inward_material_quantity = $request->inward_material_quantity;
+        $store->unit_material_quantity = $request->unit_material_quantity;
+        $store->material_uom_id = $request->material_uom_id;
         $store->checked_quantity = 0;
         $store->available_quantity = 0;
         $store->created_by = auth()->user()->id;            
         $store->updated_by = auth()->user()->id;
         $store->save();
-        DB::commit();
-        // Purchase Order 
-        //return redirect()->route('store.getConfirm', $store->id);
-       //return response()->json(['success' => 'Store Stock Added Successfully!','status' => 200]);
-       return back()->withSuccess('Store Stock Added Successfully!');            
+        return back()->withSuccess('Store Stock Added Successfully!');
+        //DB::commit();
+                   
         } catch (\Throwable $th) {
             //throw $th;
-            DB::rollback();
+           // DB::rollback();
             return back()->withError($th->getMessage());            
         }
     }
@@ -211,17 +213,28 @@ class StoreReceiveEntryController extends Controller
 
     public function getPurchaseOrder(Request $request)
     {
+       
         $purchase_order_id = $request->input('purchase_order_id');
-        $purchase_order = PoMaster::find($purchase_order_id);
-        $supplier = Supplier::find($purchase_order->supplier_id);
-        $test = PoMaster::with(['uom','raw_material','material_uom','supplier'])->find($request->input('purchase_order_id'));
-        $type = Type::find($test->raw_material->type_id);
-        $store_stock = StoreStock::where('purchase_order_id',$request->input('purchase_order_id'))->sum('issued_quantity');
-        $store_material_stock = StoreStock::where('purchase_order_id',$request->input('purchase_order_id'))->sum('issued_material_quantity');
-        $available_quantity = ($purchase_order->po_quantity)-$store_stock;
-        $available_material = ($purchase_order->material_quantity)-$store_material_stock;
-        $unit_material_quantity = $purchase_order->unit_material_quantity;
-        return response(['test' => $test,'type' => $type,'supplier'=>$supplier,'available_quantity'=>$available_quantity,'available_material'=>$available_material,'unit_material_quantity'=>$unit_material_quantity]);
+        $raw_material_id = $request->input('raw_material_id');
+        $purchase_order = PurchaseOrder::with('supplier')->find($purchase_order_id);
+        $total_quantity = PurchaseOrderItem::with('purchase_order')->where('raw_material_id',$raw_material_id)->where('purchase_order_id',$purchase_order_id)->GroupBy('raw_material_id')->sum('quantity');
+        $used_quantity = StoreStock::where('raw_material_id',$raw_material_id)->where('purchase_order_id',$purchase_order_id)->sum('inward_quantity')??0;
+        $avaialble_quantity = round($total_quantity-$used_quantity,2);
+        $material = RawMaterial::find($raw_material_id);
+        $unit_weight = $material->unit_weight;
+        $available_material_quantity = round($avaialble_quantity/$unit_weight,2);
+        return response(['purchase_order'=>$purchase_order,'purchase_quantity'=>$total_quantity,'used_quantity'=>$used_quantity,'available_quantity'=>$avaialble_quantity,'unit_weight'=>$unit_weight,'available_material_quantity'=>$available_material_quantity]);
+
+        // dd($purchase_order->purchase_order_items);
+        // $supplier = Supplier::find($purchase_order->supplier_id);
+        // $test = PurchaseOrder::with(['supplier'])->find($request->input('purchase_order_id'));
+        // $type = Type::find($test->raw_material->type_id);
+        // $store_stock = StoreStock::where('purchase_order_id',$request->input('purchase_order_id'))->sum('issued_quantity');
+        // $store_material_stock = StoreStock::where('purchase_order_id',$request->input('purchase_order_id'))->sum('issued_material_quantity');
+        // $available_quantity = ($purchase_order->po_quantity)-$store_stock;
+        // $available_material = ($purchase_order->material_quantity)-$store_material_stock;
+        // $unit_material_quantity = $purchase_order->unit_material_quantity;
+        // return response(['test' => $test,'type' => $type,'supplier'=>$supplier,'available_quantity'=>$available_quantity,'available_material'=>$available_material,'unit_material_quantity'=>$unit_material_quantity]);
         // $html = view('store.supplier_details',compact('supplier'))->render();
         // return response(['html' => $html]);
     }
@@ -231,16 +244,30 @@ class StoreReceiveEntryController extends Controller
         if($request->type_id)
         {
             $raw_materials = RawMaterial::where('type_id',$request->type_id)->get();
-            return json_encode($raw_materials);
+            $html='<option value="">Select Material</option>';
+            foreach($raw_materials as $raw_material)
+            {
+                $html.='<option value="'.$raw_material->id.'">'.$raw_material->name.'</option>';
+            }
+
+            return $html;
         }
     }
     public function getMaterialPurchaseOrder(Request $request)
     {
         if($request->raw_material_id)
         {
-            //$purchase_order = PurchaseOrderItem::with('purchase_order','raw_material')->where('raw_material_id',$request->raw_material_id)->GroupBy('purchase_order_id')->get();
-            $purchase_order = PoMaster::with('raw_material')->where('raw_material_id',$request->raw_material_id)->get();
-            return json_encode($purchase_order);
+            $purchase_orders = PurchaseOrderItem::with('purchase_order','raw_material')->where('raw_material_id',$request->raw_material_id)->GroupBy('purchase_order_id')->get();
+            //$purchase_order = PoMaster::with('raw_material')->where('raw_material_id',$request->raw_material_id)->get();
+            $html = '<option value="">Select Purchase Order</option>';
+            foreach($purchase_orders as $order)
+            {
+                $html.='<option value="'.$order->purchase_order_id.'">'.$order->purchase_order->purchase_order_number.'</option>';
+            }
+            $material = RawMaterial::find($request->raw_material_id);
+            $uomlist = "<option value='".$material->uom_id."'>".$material->uom->name."</option>";
+            return response(['orders'=>$html,'uom'=>$uomlist]);$html;
+            //return json_encode($purchase_order);
         }
     }
     public function getConfirm($id)

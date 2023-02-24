@@ -27,22 +27,21 @@
       </ul>
     </li>
     @endif
-    {{-- <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+    <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-library-building')}}"></use>
       </svg> Purchase </a>
       <ul class="nav-group-items">
         <li class="nav-item"><a class="nav-link" href="{{route("purchase_order.index")}}"><span class="nav-icon"></span> Purchase Orders </a></li>      
       </ul>
-    </li> --}}
+    </li>
     @if(auth()->user()->id==3 || auth()->user()->id==1)
     <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
       <svg class="nav-icon">
         <use xlink:href="{{asset('vendors/@coreui/icons/svg/free.svg#cil-library-building')}}"></use>
       </svg> Stores</a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link" href="{{route("po_master.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>      
-        {{-- <li class="nav-item"><a class="nav-link" href="{{route("store_receive.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>       --}}
+        <li class="nav-item"><a class="nav-link" href="{{route("store_receive.create")}}"><span class="nav-icon"></span> Store Receive RM </a></li>      
         <li class="nav-item"><a class="nav-link" href="{{route("store_issue.create")}}"><span class="nav-icon"></span> Store Issue RM </a></li>      
         <li class="nav-item"><a class="nav-link" href="{{route("store_issue.dc_issuance")}}"><span class="nav-icon"></span> DC Issuance </a></li>      
         <li class="nav-item"><a class="nav-link" href="{{route('store_receive_child_part.create')}}"><span class="nav-icon"></span> Store Receive Child Part </a></li>      

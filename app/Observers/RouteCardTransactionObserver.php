@@ -4,15 +4,16 @@ namespace App\Observers;
 
 use App\Models\RouteCardTransaction;
 use App\Models\StoreStock;
+use App\Models\SheetNesting;
 class RouteCardTransactionObserver
 {
-    /**
-     * Handle the RouteCardTransaction "created" event.
-     *
-     * @param  \App\Models\RouteCardTransaction  $routeCardTransaction
-     * @return void
-     */
-    public function created(RouteCardTransaction $routeCardTransaction)
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+    public function created(RouteCardTransaction $routeCardTransaction) 
     {
         $stock = StoreStock::find($routeCardTransaction->store_stock_id);
         $total_quantity = ($stock->checked_quantity)*($stock->unit_material_quantity);
@@ -23,7 +24,8 @@ class RouteCardTransactionObserver
         $store_stock = StoreStock::find($routeCardTransaction->store_stock_id);
         $store_stock->available_quantity = $balance_quantity;
         $store_stock->update;
-        }
+
+    }
 
     /**
      * Handle the RouteCardTransaction "updated" event.

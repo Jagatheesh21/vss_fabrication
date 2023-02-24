@@ -143,6 +143,12 @@ class SheetNestingController extends Controller
         $html = view('sheet_nesting.nesting_master',compact('types'))->render();
         return response(['html' => $html]);
     }
+    public function dynamic_nesting_master()
+    {
+        $types = Type::where('category_id',2)->where('status',1)->get();
+        $html = view('sheet_nesting.dynamic_nesting_master',compact('types'))->render();
+        return response(['html' => $html]);
+    }
     public function get_child_parts(Request $request)
     {
         $type_id = $request->type_id;

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PurchaseOrder extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['purchase_order_number','raw_material_id','supplier_id','unit_quantity','total_quantity','purchase_order_date','uom_id','invoice_number','quantity','purchase_status'];
+    protected $fillable = ['purchase_order_number','supplier_id','gst_number','invoice_number','reference_number','purchase_order_date','state','state_code','pin_code','delivery_terms','mode_of_dispatch','payment_terms','address','sub_total','cgst','sgst','igst','tax','tax_price','total_price','useage_quantity'];
     public static function getNextPurchaseOrderNumber()
 {
     // Get the last created order
@@ -47,6 +47,7 @@ public function supplier()
 {
     return $this->belongsTo(Supplier::class, 'supplier_id');
 }
+
 public function purchase_order_items()
 {
     return $this->hasMany(PurchaseOrderItem::class,'purchase_order_id');
